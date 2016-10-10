@@ -25,7 +25,7 @@ namespace Silent.Practices.Messaging.Tests
             IHandler<FakeMessage> fakeMessageHandler = Mock.Of<IHandler<FakeMessage>>();
 
             // Act
-            messageBus.Register<FakeMessage>(fakeMessageHandler);
+            messageBus.Register(fakeMessageHandler);
             var handlers = messageBus.GetHandlers<FakeMessage>();
 
             // Assert
@@ -41,10 +41,10 @@ namespace Silent.Practices.Messaging.Tests
             IHandler<FakeMessage> fakeMessageHandler = Mock.Of<IHandler<FakeMessage>>();
 
             // Act
-            messageBus.Register<FakeMessage>(fakeMessageHandler);
+            messageBus.Register(fakeMessageHandler);
 
             // Assert
-            Assert.Throws<ArgumentNullException>(() => messageBus.Send(null));
+            Assert.Throws<ArgumentNullException>(() => messageBus.Send<FakeMessage>(null));
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Silent.Practices.Messaging.Tests
             FakeMessage fakeMessage = new FakeMessage();
 
             // Act
-            messageBus.Register<FakeMessage>(fakeMessageHandler);
+            messageBus.Register(fakeMessageHandler);
             messageBus.Send(fakeMessage);
 
             // Assert

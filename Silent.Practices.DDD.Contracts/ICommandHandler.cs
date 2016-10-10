@@ -2,7 +2,7 @@
 
 namespace Silent.Practices.Domain.Contracts
 {
-    public interface ICommandHandler : IHandler<Command>
+    public interface ICommandHandler<in TCommand> : IHandler<TCommand> where TCommand : Command
     {
     }
 }

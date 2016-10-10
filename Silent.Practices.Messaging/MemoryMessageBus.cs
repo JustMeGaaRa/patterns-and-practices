@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Silent.Practices.Diagnostics;
 using Silent.Practices.Patterns;
 
@@ -7,14 +8,14 @@ namespace Silent.Practices.Messaging
 {
     public class MemoryMessageBus<TMessage> : IMessageBus<TMessage>
     {
-        private readonly Dictionary<Type, List<IHandler<TMessage>>> _messageHandlers;
+        private readonly Dictionary<Type, List<object>> _messageHandlers;
 
         public MemoryMessageBus()
         {
-            _messageHandlers = new Dictionary<Type, List<IHandler<TMessage>>>();
-        } 
+            _messageHandlers = new Dictionary<Type, List<object>>();
+        }
 
-        public bool Register<TConcrete>(IHandler<TMessage> handler) where TConcrete : TMessage
+        public bool Register<TConcrete>(IHandler<TConcrete> handler) where TConcrete : TMessage
         {
             Contract.NotNull(handler, nameof(handler));
 
@@ -24,18 +25,17 @@ namespace Silent.Practices.Messaging
             return true;
         }
 
-        public IReadOnlyCollection<IHandler<TMessage>> GetHandlers<TConcrete>() where TConcrete : TMessage
+        public IReadOnlyCollection<IHandler<TConcrete>> GetHandlers<TConcrete>() where TConcrete : TMessage
         {
-            Type messageType = typeof(TConcrete);
-            return InnerGetHandlers(messageType);
+            return InnerGetHandlers<TConcrete>();
         }
 
-        public void Send(TMessage message)
+        public void Send<TConcrete>(TConcrete message)
         {
             Contract.NotNull(message, nameof(message));
 
             Type messageType = message.GetType();
-            var handlers = InnerGetHandlers(messageType);
+            var handlers = InnerGetHandlers<TConcrete>();
 
             if (handlers == null)
             {
@@ -52,15 +52,15 @@ namespace Silent.Practices.Messaging
         {
             if (!_messageHandlers.ContainsKey(type))
             {
-                _messageHandlers.Add(type, new List<IHandler<TMessage>>());
+                _messageHandlers.Add(type, new List<object>());
             }
         }
 
-        private IReadOnlyCollection<IHandler<TMessage>> InnerGetHandlers(Type messageType)
+        private IReadOnlyCollection<IHandler<TConcrete>> InnerGetHandlers<TConcrete>()
         {
-            return _messageHandlers.ContainsKey(messageType)
-                ? _messageHandlers[messageType].AsReadOnly()
-                : default(IReadOnlyCollection<IHandler<TMessage>>);
+            return _messageHandlers.ContainsKey(typeof(TConcrete))
+                ? _messageHandlers[typeof(TConcrete)].Cast<IHandler<TConcrete>>().ToList()
+                : default(IReadOnlyCollection<IHandler<TConcrete>>);
         }
     }
 }

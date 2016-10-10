@@ -59,18 +59,25 @@
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
       </ItemGroup>
     </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
+    <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="MemoryEventStore.cs" />
+    <Compile Include="MemoryEvenAggregateRepositoryTest.cs" />
+    <Compile Include="MemoryEventStoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj">
+      <Project>{3c507d1b-0d15-4ac7-bcaa-11bfbdce258c}</Project>
+      <Name>Silent.Practices.EventStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj">
+      <Project>{1a7267b3-9dc4-4962-9a30-6675785f5088}</Project>
+      <Name>Silent.Practices.Persistance</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

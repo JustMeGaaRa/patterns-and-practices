@@ -3,12 +3,12 @@ using Silent.Practices.Patterns;
 
 namespace Silent.Practices.Messaging
 {
-    public interface IMessageBus<TMessage>
+    public interface IMessageBus<in TMessage>
     {
-        bool Register<TConcrete>(IHandler<TMessage> handler) where TConcrete : TMessage;
+        bool Register<TConcrete>(IHandler<TConcrete> handler) where TConcrete : TMessage;
 
-        IReadOnlyCollection<IHandler<TMessage>> GetHandlers<TConcrete>() where TConcrete : TMessage;
+        IReadOnlyCollection<IHandler<TConcrete>> GetHandlers<TConcrete>() where TConcrete : TMessage;
 
-        void Send(TMessage message);
+        void Send<TConcrete>(TConcrete message);
     }
 }

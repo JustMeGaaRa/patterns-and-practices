@@ -36,8 +36,11 @@
   <ItemGroup>
     <Compile Include="EventAggregate.cs" />
     <Compile Include="Event.cs" />
+    <Compile Include="IEventAggregateRepository.cs" />
     <Compile Include="IEventPublisher.cs" />
     <Compile Include="IEventStore.cs" />
+    <Compile Include="MemoryEvenAggregateRepository.cs" />
+    <Compile Include="MemoryEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
