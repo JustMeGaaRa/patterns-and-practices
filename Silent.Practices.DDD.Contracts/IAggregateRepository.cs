@@ -5,7 +5,7 @@ namespace Silent.Practices.Domain.Contracts
 {
     public interface IAggregateRepository<TAggregate> : 
         IRepository<TAggregate> 
-        where TAggregate : EventAggregate<int>
+        where TAggregate : EventAggregate<uint>
     {
     }
 }

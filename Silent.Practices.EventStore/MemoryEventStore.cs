@@ -4,19 +4,19 @@ namespace Silent.Practices.EventStore
 {
     public class MemoryEventStore : IEventStore
     {
-        private readonly Dictionary<int, List<Event>> _events = new Dictionary<int, List<Event>>();
+        private readonly Dictionary<uint, List<Event>> _events = new Dictionary<uint, List<Event>>();
 
-        public IEnumerable<Event> GetEventsById(int eventAggregateId)
+        public IEnumerable<Event> GetEventsById(uint eventAggregateId)
         {
             if (!_events.ContainsKey(eventAggregateId))
             {
-                throw new KeyNotFoundException($"Event agregate with given key is not present");
+                throw new KeyNotFoundException($"Event aggregate with id '{eventAggregateId}' is not present");
             }
 
             return _events[eventAggregateId];
         }
 
-        public bool SaveEvents(int eventAggregateId, IEnumerable<Event> unsavedChanges)
+        public bool SaveEvents(uint eventAggregateId, IEnumerable<Event> unsavedChanges)
         {
             if (!_events.ContainsKey(eventAggregateId))
             {

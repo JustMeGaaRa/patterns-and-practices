@@ -2,14 +2,12 @@
 {
     public interface IRepository<TItem, in TKey> where TItem : EntityBase<TKey>
     {
-        int Count { get; }
-
         TItem GetById(TKey id);
 
         bool Save(TItem item);
     }
 
-    public interface IRepository<TItem> : IRepository<TItem, int> where TItem : EntityBase<int>
+    public interface IRepository<TItem> : IRepository<TItem, uint> where TItem : EntityBase<uint>
     {
     }
 }

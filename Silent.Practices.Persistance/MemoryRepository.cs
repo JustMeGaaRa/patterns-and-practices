@@ -4,13 +4,11 @@ using Silent.Practices.Extensions;
 
 namespace Silent.Practices.Persistance
 {
-    public sealed class MemoryRepository<TEntity> : IRepository<TEntity> where TEntity : EntityBase<int>
+    public sealed class MemoryRepository<TEntity> : IRepository<TEntity> where TEntity : EntityBase<uint>
     {
-        private readonly Dictionary<int, TEntity> _entities = new Dictionary<int, TEntity>();
+        private readonly Dictionary<uint, TEntity> _entities = new Dictionary<uint, TEntity>();
 
-        public int Count => _entities.Count;
-
-        public TEntity GetById(int id)
+        public TEntity GetById(uint id)
         {
             if (!_entities.ContainsKey(id))
             {

@@ -3,7 +3,7 @@
 namespace Silent.Practices.EventStore
 {
     public interface IEventAggregateRepository<TEntity> :
-        IRepository<TEntity> where TEntity : EventAggregate<int>
+        IRepository<TEntity> where TEntity : EventAggregate<uint>
     {
     }
 }

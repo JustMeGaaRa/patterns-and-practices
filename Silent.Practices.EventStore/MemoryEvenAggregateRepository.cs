@@ -1,24 +1,22 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Silent.Practices.Diagnostics;
 
 namespace Silent.Practices.EventStore
 {
     public class MemoryEvenAggregateRepository<TEntity> : 
         IEventAggregateRepository<TEntity>
-        where TEntity : EventAggregate<int>, new()
+        where TEntity : EventAggregate<uint>, new()
     {
         private readonly IEventStore _eventStore;
 
         public MemoryEvenAggregateRepository(IEventStore eventStore)
         {
+            Contract.NotNull(eventStore, nameof(eventStore));
             _eventStore = eventStore;
         }
 
-        public int Count
-        {
-            get { throw new NotSupportedException(); }
-        }
-
-        public TEntity GetById(int id)
+        public TEntity GetById(uint id)
         {
             TEntity eventAggregate = new TEntity();
             eventAggregate.ApplyHistory(_eventStore.GetEventsById(id));
@@ -27,7 +25,10 @@ namespace Silent.Practices.EventStore
 
         public bool Save(TEntity item)
         {
-            return _eventStore.SaveEvents(item.Id, item.GetUncommitted());
+            Contract.NotNull(item, nameof(item));
+
+            IEnumerable<Event> uncommitted = item.GetUncommitted().ToList();
+            return uncommitted.Any() && _eventStore.SaveEvents(item.Id, uncommitted);
         }
     }
 }

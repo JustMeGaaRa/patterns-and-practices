@@ -4,8 +4,8 @@ namespace Silent.Practices.EventStore
 {
     public interface IEventStore
     {
-        IEnumerable<Event> GetEventsById(int eventAggregateId);
+        IEnumerable<Event> GetEventsById(uint eventAggregateId);
 
-        bool SaveEvents(int eventAggregateId, IEnumerable<Event> unsavedChanges);
+        bool SaveEvents(uint eventAggregateId, IEnumerable<Event> unsavedChanges);
     }
 }

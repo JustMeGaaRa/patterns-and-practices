@@ -27,6 +27,12 @@ namespace Silent.Practices.EventStore
             }
         }
 
+        protected void RegisterHandler<TEvent>(Action<Event> handler)
+        {
+            Type eventType = typeof(TEvent);
+            _actualHandlers[eventType] = handler;
+        }
+
         protected void Apply<TEvent>(TEvent instance) where TEvent : Event
         {
             Apply(instance, true);

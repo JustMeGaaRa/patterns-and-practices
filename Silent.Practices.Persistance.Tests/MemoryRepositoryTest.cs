@@ -7,7 +7,7 @@ namespace Silent.Practices.Persistance.Tests
     public class MemoryRepositoryTest
     {
         [Fact]
-        public void Save_NewEntity_ShouldContainOneItem()
+        public void Save_NewEntity_ShouldReturnTrue()
         {
             // Arrange
             IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
@@ -18,7 +18,6 @@ namespace Silent.Practices.Persistance.Tests
 
             // Assert
             Assert.True(result);
-            Assert.Equal(1, repository.Count);
         }
 
         [Fact]
@@ -32,12 +31,12 @@ namespace Silent.Practices.Persistance.Tests
         }
 
         [Fact]
-        public void Save_ModifiedInstance_ShouldUpdateOriginal()
+        public void Save_ModifiedViaNewInstance_ShouldUpdateOriginal()
         {
             // Arrange
             string oldValue = "Old Value";
             string newValue = "New Value";
-            int entityId = 1;
+            uint entityId = 1;
 
             IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
             FakeEntity originalEntity = new FakeEntity
@@ -57,7 +56,6 @@ namespace Silent.Practices.Persistance.Tests
 
             // Assert
             Assert.True(result);
-            Assert.Equal(1, repository.Count);
             Assert.NotSame(originalEntity, modifiedEntity);
             Assert.Equal(originalEntity.Value, modifiedEntity.Value);
         }
@@ -69,7 +67,6 @@ namespace Silent.Practices.Persistance.Tests
             IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
 
             // Act, Assert
-            Assert.Equal(0, repository.Count);
             Assert.Throws<KeyNotFoundException>(() => repository.GetById(1));
         }
 
@@ -84,7 +81,6 @@ namespace Silent.Practices.Persistance.Tests
             repository.Save(fakeEntity);
 
             // Assert
-            Assert.Equal(1, repository.Count);
             Assert.Throws<KeyNotFoundException>(() => repository.GetById(2));
         }
 
@@ -92,7 +88,7 @@ namespace Silent.Practices.Persistance.Tests
         public void GetById_WithExistingId_ShouldReturnEntity()
         {
             // Arrange
-            int entityId = 1;
+            uint entityId = 1;
             IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
             FakeEntity fakeEntity = new FakeEntity { Id = entityId };
 
@@ -101,12 +97,11 @@ namespace Silent.Practices.Persistance.Tests
             var result = repository.GetById(entityId);
 
             // Assert
-            Assert.Equal(1, repository.Count);
             Assert.NotNull(result);
             Assert.Same(fakeEntity, result);
         }
 
-        private class FakeEntity : EntityBase<int>
+        private class FakeEntity : EntityBase<uint>
         {
             public string Value { get; set; }
         }
