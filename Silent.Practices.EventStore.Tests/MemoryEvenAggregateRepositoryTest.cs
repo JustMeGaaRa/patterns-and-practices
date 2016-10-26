@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
+using Silent.Practices.EventStore.Tests.Fakes;
 using Xunit;
 
 namespace Silent.Practices.EventStore.Tests
@@ -45,7 +46,7 @@ namespace Silent.Practices.EventStore.Tests
             eventStoreMock.Verify(
                 m => m.SaveEvents(
                     It.IsAny<uint>(),
-                    It.IsAny<IEnumerable<Event>>()),
+                    It.IsAny<ICollection<Event>>()),
                 Times.Never);
         }
 
@@ -67,18 +68,79 @@ namespace Silent.Practices.EventStore.Tests
             eventStoreMock.Verify(
                 m => m.SaveEvents(
                     It.IsAny<uint>(),
-                    It.IsAny<IEnumerable<Event>>()),
+                    It.IsAny<ICollection<Event>>()),
                 Times.Once);
         }
 
-        private Mock<IEventStore> CreateEventStoreMock()
+        [Fact]
+        public void GetById_OnEmptyRepository_ShouldReturnNull()
         {
+            // Arrange
+            Mock<IEventStore> eventStoreMock = CreateEventStoreMock();
+            IEventStore eventStore = eventStoreMock.Object;
+            IEventAggregateRepository<FakeEventAggregate> repository =
+                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+
+            // Act
+            var result = repository.GetById(1);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetById_WithExistingid_ShouldReturnNotNull()
+        {
+            // Arrange
+            uint eventAggregateId = 1;
+            Mock<IEventStore> eventStoreMock = CreateEventStoreMock(eventAggregateId);
+            IEventStore eventStore = eventStoreMock.Object;
+            IEventAggregateRepository<FakeEventAggregate> repository =
+                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+
+            // Act
+            var result = repository.GetById(eventAggregateId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(eventAggregateId, result.Id);
+        }
+
+        [Fact]
+        public void GetById_OnEmptyRepository_ShouldCallEventStore()
+        {
+            // Arrange
+            Mock<IEventStore> eventStoreMock = CreateEventStoreMock();
+            IEventStore eventStore = eventStoreMock.Object;
+            IEventAggregateRepository<FakeEventAggregate> repository =
+                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+
+            // Act
+            repository.GetById(1);
+
+            // Assert
+            eventStoreMock.Verify(
+                m => m.GetEventsById(It.IsAny<uint>()),
+                Times.Once);
+        }
+
+        private Mock<IEventStore> CreateEventStoreMock(uint eventAggregateId = 0)
+        {
+            var eventList = new List<Event>
+            {
+                new FakeCreatedEvent { AggregateId = eventAggregateId }
+            };
+
             Mock<IEventStore> eventStoreMock = new Mock<IEventStore>();
             eventStoreMock.Setup(
                 m => m.SaveEvents(
                     It.IsAny<uint>(),
-                    It.IsAny<IEnumerable<Event>>()))
+                    It.IsAny<ICollection<Event>>()))
                 .Returns(true);
+            eventStoreMock.Setup(
+                m => m.GetEventsById(
+                    eventAggregateId))
+                .Returns(eventList);
 
             return eventStoreMock;
         }
@@ -94,50 +156,6 @@ namespace Silent.Practices.EventStore.Tests
             FakeEventAggregate fakeEventAggregate = new FakeEventAggregate(aggregateId, "Value");
             fakeEventAggregate.ChangeValue("New Value");
             return fakeEventAggregate;
-        }
-
-        public class FakeEventAggregate : EventAggregate<uint>
-        {
-            public FakeEventAggregate()
-            {
-                RegisterHandler<FakeCreatedEvent>(x => { });
-                RegisterHandler<FakeValueUpdatedEvent>(x => { });
-                RegisterHandler<FakeDeletedEvent>(x => { });
-            }
-
-            public FakeEventAggregate(uint eventAggregateId, string value) : this()
-            {
-                Apply(new FakeCreatedEvent { AggregateId = eventAggregateId, Value = value });
-            }
-
-            public void ChangeValue(string newValue)
-            {
-                Apply(new FakeValueUpdatedEvent { AggregateId = Id, NewValue = newValue });
-            }
-
-            public void Delete()
-            {
-                Apply(new FakeDeletedEvent { AggregateId = Id });
-            }
-        }
-
-        public class FakeCreatedEvent : Event
-        {
-            public uint AggregateId { get; set; }
-
-            public string Value { get; set; }
-        }
-
-        public class FakeValueUpdatedEvent : Event
-        {
-            public uint AggregateId { get; set; }
-
-            public string NewValue { get; set; }
-        }
-
-        public class FakeDeletedEvent : Event
-        {
-            public uint AggregateId { get; set; }
         }
     }
 }

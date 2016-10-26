@@ -50,10 +50,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Silent.Practices.Diagnostics\Silent.Practices.Diagnostics.csproj">
-      <Project>{64a309f2-e386-4a36-bea3-7fb600407986}</Project>
-      <Name>Silent.Practices.Diagnostics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj">
       <Project>{4ad13614-cca0-4acc-9e87-00e381d4e2ec}</Project>
       <Name>Silent.Practices.Patterns</Name>

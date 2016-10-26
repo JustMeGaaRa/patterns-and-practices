@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Silent.Practices.Diagnostics;
 
 namespace Silent.Practices.EventStore
 {
@@ -12,22 +12,36 @@ namespace Silent.Practices.EventStore
 
         public MemoryEvenAggregateRepository(IEventStore eventStore)
         {
-            Contract.NotNull(eventStore, nameof(eventStore));
+            if (eventStore == null)
+            {
+                throw new ArgumentNullException(nameof(eventStore));
+            }
+
             _eventStore = eventStore;
         }
 
         public TEntity GetById(uint id)
         {
-            TEntity eventAggregate = new TEntity();
-            eventAggregate.ApplyHistory(_eventStore.GetEventsById(id));
+            TEntity eventAggregate = null;
+            IEnumerable<Event> committed = _eventStore.GetEventsById(id);
+
+            if (committed != null && committed.Any())
+            {
+                eventAggregate = new TEntity();
+                eventAggregate.ApplyHistory(committed);
+            }
+            
             return eventAggregate;
         }
 
         public bool Save(TEntity item)
         {
-            Contract.NotNull(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
 
-            IEnumerable<Event> uncommitted = item.GetUncommitted().ToList();
+            ICollection<Event> uncommitted = item.GetUncommitted().ToList();
             return uncommitted.Any() && _eventStore.SaveEvents(item.Id, uncommitted);
         }
     }

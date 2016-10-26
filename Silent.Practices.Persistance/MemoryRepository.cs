@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Silent.Practices.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using Silent.Practices.Extensions;
 
 namespace Silent.Practices.Persistance
@@ -20,7 +20,10 @@ namespace Silent.Practices.Persistance
 
         public bool Save(TEntity item)
         {
-            Contract.NotNull(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
 
             if (_entities.ContainsKey(item.Id))
             {

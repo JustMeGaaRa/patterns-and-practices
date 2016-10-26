@@ -21,6 +21,11 @@ namespace Silent.Practices.EventStore
 
         public void ApplyHistory(IEnumerable<Event> historicalEvents)
         {
+            if (historicalEvents == null)
+            {
+                throw new ArgumentNullException(nameof(historicalEvents));
+            }
+
             foreach (Event historyEvent in historicalEvents)
             {
                 Apply(historyEvent, false);
@@ -33,14 +38,19 @@ namespace Silent.Practices.EventStore
             _actualHandlers[eventType] = handler;
         }
 
-        protected void Apply<TEvent>(TEvent instance) where TEvent : Event
+        protected void Apply(Event instance)
         {
             Apply(instance, true);
         }
 
-        private void Apply<TEvent>(TEvent instance, bool isNew) where TEvent : Event
+        private void Apply(Event instance, bool isNew)
         {
-            Type eventType = typeof(TEvent);
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance), "Event instance cannot be null.");
+            }
+
+            Type eventType = instance.GetType();
 
             if (!_actualHandlers.ContainsKey(eventType))
             {

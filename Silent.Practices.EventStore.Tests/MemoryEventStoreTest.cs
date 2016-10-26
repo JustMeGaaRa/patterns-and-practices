@@ -45,17 +45,20 @@ namespace Silent.Practices.EventStore.Tests
         }
 
         [Fact]
-        public void GetEventsById_OnEmptyStore_ShouldThrowException()
+        public void GetEventsById_OnEmptyStore_ShouldReturnEmptyCollection()
         {
             // Arrange
             IEventStore eventStore = new MemoryEventStore();
 
-            // Act, Assert
-            Assert.Throws<KeyNotFoundException>(() => eventStore.GetEventsById(1));
+            // Act
+            ICollection<Event> result = eventStore.GetEventsById(1);
+
+            // Assert
+            Assert.Empty(result);
         }
 
         [Fact]
-        public void GetEventsById_WithUnexistingId_ShouldThrowException()
+        public void GetEventsById_WithUnexistingId_ShouldReturnEmptyCollection()
         {
             // Arrange
             uint eventAggregateId = 1;
@@ -63,8 +66,11 @@ namespace Silent.Practices.EventStore.Tests
             IEventStore eventStore = new MemoryEventStore();
             eventStore.SaveEvents(eventAggregateId, fakeEvents);
 
-            // Act, Assert
-            Assert.Throws<KeyNotFoundException>(() => eventStore.GetEventsById(2));
+            // Act
+            ICollection<Event> result = eventStore.GetEventsById(2);
+
+            // Assert
+            Assert.Empty(result);
         }
 
         [Fact]

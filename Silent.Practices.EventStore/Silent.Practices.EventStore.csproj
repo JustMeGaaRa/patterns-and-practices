@@ -44,10 +44,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Silent.Practices.Diagnostics\Silent.Practices.Diagnostics.csproj">
-      <Project>{64a309f2-e386-4a36-bea3-7fb600407986}</Project>
-      <Name>Silent.Practices.Diagnostics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj">
       <Project>{1a7267b3-9dc4-4962-9a30-6675785f5088}</Project>
       <Name>Silent.Practices.Persistance</Name>

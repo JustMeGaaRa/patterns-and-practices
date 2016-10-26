@@ -70,6 +70,11 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="EventAggregateTest.cs" />
+    <Compile Include="Fakes\FakeCreatedEvent.cs" />
+    <Compile Include="Fakes\FakeDeletedEvent.cs" />
+    <Compile Include="Fakes\FakeEventAggregate.cs" />
+    <Compile Include="Fakes\FakeValueUpdatedEvent.cs" />
     <Compile Include="MemoryEvenAggregateRepositoryTest.cs" />
     <Compile Include="MemoryEventStoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +92,7 @@
       <Name>Silent.Practices.Persistance</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

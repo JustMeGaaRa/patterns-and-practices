@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Silent.Practices.Diagnostics;
 using Silent.Practices.Patterns;
 
 namespace Silent.Practices.Messaging
@@ -17,7 +16,10 @@ namespace Silent.Practices.Messaging
 
         public bool Register<TConcrete>(IHandler<TConcrete> handler) where TConcrete : TMessage
         {
-            Contract.NotNull(handler, nameof(handler));
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
 
             Type messageType = typeof(TConcrete);
             EnsureTypeRegistratin(messageType);
@@ -32,7 +34,10 @@ namespace Silent.Practices.Messaging
 
         public void Send<TConcrete>(TConcrete message)
         {
-            Contract.NotNull(message, nameof(message));
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             Type messageType = message.GetType();
             var handlers = InnerGetHandlers<TConcrete>();

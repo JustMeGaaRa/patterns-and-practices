@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Extensions
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Messaging.Tests", "Silent.Practices.Messaging.Tests\Silent.Practices.Messaging.Tests.csproj", "{1C17F5D5-2968-4488-9245-4A04B247DAA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Diagnostics", "Silent.Practices.Diagnostics\Silent.Practices.Diagnostics.csproj", "{64A309F2-E386-4A36-BEA3-7FB600407986}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{C2117FAC-7A59-4C94-9C0B-91B92D9DB36B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{CBCF2B2C-0588-44C7-8A0A-3EF4BEC4A0C1}"
@@ -77,10 +75,6 @@ Global
 		{1C17F5D5-2968-4488-9245-4A04B247DAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C17F5D5-2968-4488-9245-4A04B247DAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C17F5D5-2968-4488-9245-4A04B247DAA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64A309F2-E386-4A36-BEA3-7FB600407986}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64A309F2-E386-4A36-BEA3-7FB600407986}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64A309F2-E386-4A36-BEA3-7FB600407986}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64A309F2-E386-4A36-BEA3-7FB600407986}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8BBF49DB-7E0B-4064-AF50-2CEBD4DFA3E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8BBF49DB-7E0B-4064-AF50-2CEBD4DFA3E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BBF49DB-7E0B-4064-AF50-2CEBD4DFA3E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
