@@ -14,7 +14,7 @@ namespace Silent.Practices.Messaging
             _messageHandlers = new Dictionary<Type, List<object>>();
         }
 
-        public bool Register<TConcrete>(IHandler<TConcrete> handler) where TConcrete : TMessage
+        public IDisposable Subscribe<TConcrete>(IHandler<TConcrete> handler) where TConcrete : TMessage
         {
             if (handler == null)
             {
@@ -24,15 +24,10 @@ namespace Silent.Practices.Messaging
             Type messageType = typeof(TConcrete);
             EnsureTypeRegistratin(messageType);
             _messageHandlers[messageType].Add(handler);
-            return true;
+            return new UnsubscribeDisposable<TConcrete>(_messageHandlers);
         }
 
-        public IReadOnlyCollection<IHandler<TConcrete>> GetHandlers<TConcrete>() where TConcrete : TMessage
-        {
-            return InnerGetHandlers<TConcrete>();
-        }
-
-        public void Send<TConcrete>(TConcrete message)
+        public void Publish<TConcrete>(TConcrete message) where TConcrete : TMessage
         {
             if (message == null)
             {
@@ -53,6 +48,11 @@ namespace Silent.Practices.Messaging
             }
         }
 
+        public IReadOnlyCollection<IHandler<TConcrete>> GetSubscriptions<TConcrete>() where TConcrete : TMessage
+        {
+            return InnerGetHandlers<TConcrete>();
+        }
+
         private void EnsureTypeRegistratin(Type type)
         {
             if (!_messageHandlers.ContainsKey(type))
@@ -66,6 +66,21 @@ namespace Silent.Practices.Messaging
             return _messageHandlers.ContainsKey(typeof(TConcrete))
                 ? _messageHandlers[typeof(TConcrete)].Cast<IHandler<TConcrete>>().ToList()
                 : default(IReadOnlyCollection<IHandler<TConcrete>>);
+        }
+
+        private class UnsubscribeDisposable<TConcrete> : IDisposable
+        {
+            private readonly Dictionary<Type, List<object>> _messageHandlers;
+
+            public UnsubscribeDisposable(Dictionary<Type, List<object>> messageHandlers)
+            {
+                _messageHandlers = messageHandlers;
+            }
+
+            public void Dispose()
+            {
+                _messageHandlers.Remove(typeof (TConcrete));
+            }
         }
     }
 }

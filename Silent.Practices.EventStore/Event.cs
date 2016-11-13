@@ -2,6 +2,15 @@
 {
     public abstract class Event
     {
-        public int Version { get; set; }
+        protected Event()
+        {
+        }
+
+        protected Event(uint entityId)
+        {
+            EntityId = entityId;
+        }
+
+        public uint EntityId { get; }
     }
 }

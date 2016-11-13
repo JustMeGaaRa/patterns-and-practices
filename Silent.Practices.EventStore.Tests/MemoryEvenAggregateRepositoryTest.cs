@@ -13,7 +13,7 @@ namespace Silent.Practices.EventStore.Tests
         {
             // Arrange, Act, Assert
             Assert.Throws<ArgumentNullException>(
-                () => new MemoryEvenAggregateRepository<FakeEventAggregate>(null));
+                () => new MemoryEventAggregateRepository<FakeEventAggregate>(null));
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Silent.Practices.EventStore.Tests
             // Arrange
             IEventStore eventStore = CreateDummyEventStore();
             IEventAggregateRepository<FakeEventAggregate> repository =
-                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+                new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act, Assert
             Assert.Throws<ArgumentNullException>(() => repository.Save(null));
@@ -36,7 +36,7 @@ namespace Silent.Practices.EventStore.Tests
             IEventStore eventStore = eventStoreMock.Object;
             FakeEventAggregate fakeEventAggregate = new FakeEventAggregate();
             IEventAggregateRepository<FakeEventAggregate> repository =
-                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+                new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
             bool result = repository.Save(fakeEventAggregate);
@@ -46,7 +46,7 @@ namespace Silent.Practices.EventStore.Tests
             eventStoreMock.Verify(
                 m => m.SaveEvents(
                     It.IsAny<uint>(),
-                    It.IsAny<ICollection<Event>>()),
+                    It.IsAny<IReadOnlyCollection<Event>>()),
                 Times.Never);
         }
 
@@ -58,7 +58,7 @@ namespace Silent.Practices.EventStore.Tests
             IEventStore eventStore = eventStoreMock.Object;
             FakeEventAggregate fakeEventAggregate = CreateDirtyFake(1);
             IEventAggregateRepository<FakeEventAggregate> repository =
-                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+                new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
             bool result = repository.Save(fakeEventAggregate);
@@ -68,7 +68,7 @@ namespace Silent.Practices.EventStore.Tests
             eventStoreMock.Verify(
                 m => m.SaveEvents(
                     It.IsAny<uint>(),
-                    It.IsAny<ICollection<Event>>()),
+                    It.IsAny<IReadOnlyCollection<Event>>()),
                 Times.Once);
         }
 
@@ -79,7 +79,7 @@ namespace Silent.Practices.EventStore.Tests
             Mock<IEventStore> eventStoreMock = CreateEventStoreMock();
             IEventStore eventStore = eventStoreMock.Object;
             IEventAggregateRepository<FakeEventAggregate> repository =
-                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+                new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
             var result = repository.GetById(1);
@@ -96,7 +96,7 @@ namespace Silent.Practices.EventStore.Tests
             Mock<IEventStore> eventStoreMock = CreateEventStoreMock(eventAggregateId);
             IEventStore eventStore = eventStoreMock.Object;
             IEventAggregateRepository<FakeEventAggregate> repository =
-                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+                new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
             var result = repository.GetById(eventAggregateId);
@@ -113,7 +113,7 @@ namespace Silent.Practices.EventStore.Tests
             Mock<IEventStore> eventStoreMock = CreateEventStoreMock();
             IEventStore eventStore = eventStoreMock.Object;
             IEventAggregateRepository<FakeEventAggregate> repository =
-                new MemoryEvenAggregateRepository<FakeEventAggregate>(eventStore);
+                new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
             repository.GetById(1);
@@ -128,14 +128,14 @@ namespace Silent.Practices.EventStore.Tests
         {
             var eventList = new List<Event>
             {
-                new FakeCreatedEvent { AggregateId = eventAggregateId }
+                new FakeCreatedEvent(eventAggregateId)
             };
 
             Mock<IEventStore> eventStoreMock = new Mock<IEventStore>();
             eventStoreMock.Setup(
                 m => m.SaveEvents(
                     It.IsAny<uint>(),
-                    It.IsAny<ICollection<Event>>()))
+                    It.IsAny<IReadOnlyCollection<Event>>()))
                 .Returns(true);
             eventStoreMock.Setup(
                 m => m.GetEventsById(
@@ -153,8 +153,8 @@ namespace Silent.Practices.EventStore.Tests
 
         private FakeEventAggregate CreateDirtyFake(uint aggregateId)
         {
-            FakeEventAggregate fakeEventAggregate = new FakeEventAggregate(aggregateId, "Value");
-            fakeEventAggregate.ChangeValue("New Value");
+            FakeEventAggregate fakeEventAggregate = new FakeEventAggregate(aggregateId);
+            fakeEventAggregate.Value = "New Value";
             return fakeEventAggregate;
         }
     }

@@ -6,16 +6,16 @@ namespace Silent.Practices.EventStore
     {
         private readonly Dictionary<uint, List<Event>> _events = new Dictionary<uint, List<Event>>();
 
-        public ICollection<Event> GetEventsById(uint eventAggregateId)
+        public IReadOnlyCollection<Event> GetEventsById(uint eventAggregateId)
         {
-            ICollection<Event> events = _events.ContainsKey(eventAggregateId)
+            IReadOnlyCollection<Event> events = _events.ContainsKey(eventAggregateId)
                 ? _events[eventAggregateId]
                 : new List<Event>();
 
             return events;
         }
 
-        public bool SaveEvents(uint eventAggregateId, ICollection<Event> unsavedChanges)
+        public bool SaveEvents(uint eventAggregateId, IReadOnlyCollection<Event> unsavedChanges)
         {
             if (!_events.ContainsKey(eventAggregateId))
             {

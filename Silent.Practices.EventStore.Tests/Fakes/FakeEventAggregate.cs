@@ -2,27 +2,32 @@ namespace Silent.Practices.EventStore.Tests.Fakes
 {
     internal sealed class FakeEventAggregate : EventAggregate<uint>
     {
+        private string _value;
+
         public FakeEventAggregate()
         {
-            RegisterHandler<FakeCreatedEvent>(x =>
+            OnEvent<FakeCreatedEvent>(x => Id = x.EntityId);
+            OnEvent<FakeValueUpdatedEvent>(x => _value = x.NewValue);
+        }
+
+        public FakeEventAggregate(uint eventAggregateId) : this()
+        {
+            Apply(new FakeCreatedEvent(eventAggregateId));
+        }
+
+        public string Value
+        {
+            get
             {
-                var fakeCreatedEvent = x as FakeCreatedEvent;
-                if (fakeCreatedEvent != null)
+                return _value;
+            }
+            set
+            {
+                if (Value != value)
                 {
-                    Id = fakeCreatedEvent.AggregateId;
+                    Apply(new FakeValueUpdatedEvent(Id) { NewValue = value });
                 }
-            });
-            RegisterHandler<FakeValueUpdatedEvent>(x => { });
-        }
-
-        public FakeEventAggregate(uint eventAggregateId, string value) : this()
-        {
-            Apply(new FakeCreatedEvent { AggregateId = eventAggregateId, Value = value });
-        }
-
-        public void ChangeValue(string newValue)
-        {
-            Apply(new FakeValueUpdatedEvent { AggregateId = Id, NewValue = newValue });
+            }
         }
     }
 }

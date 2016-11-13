@@ -25,7 +25,7 @@ namespace Silent.Practices.EventStore.Tests
         public void GetUncommitted_OnCreatedAggregate_ShouldReturnCollection()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1, string.Empty);
+            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1) { Value = string.Empty };
 
             // Act
             IEnumerable<Event> result = eventAggregate.GetUncommitted();
@@ -53,7 +53,7 @@ namespace Silent.Practices.EventStore.Tests
         public void MarkAsCommitted_OnCreatedAggregate_ShouldNotContainUncommitted()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1, string.Empty);
+            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1) { Value = string.Empty };
 
             // Act
             eventAggregate.MarkAsCommitted();
@@ -78,7 +78,7 @@ namespace Silent.Practices.EventStore.Tests
         {
             // Arrange
             uint eventAggregateId = 1;
-            Event createdEvent = new FakeCreatedEvent { AggregateId = eventAggregateId, Value = "New Value" };
+            Event createdEvent = new FakeCreatedEvent(eventAggregateId) { Value = "New Value" };
             IEnumerable<Event> historyEvents = new [] { createdEvent };
             EventAggregate<uint> eventAggregate = new FakeEventAggregate();
 
@@ -106,8 +106,8 @@ namespace Silent.Practices.EventStore.Tests
         public void ApplyHistory_WithNotSupportedEventType_ShouldThrowException()
         {
             // Arrange
-            Event deletedEvent = new FakeDeletedEvent { AggregateId = 1 };
-            IEnumerable<Event> historyEvents = new Event[] { deletedEvent };
+            Event deletedEvent = new FakeDeletedEvent(1);
+            IEnumerable<Event> historyEvents = new[] { deletedEvent };
             EventAggregate<uint> eventAggregate = new FakeEventAggregate();
 
             // Act, Assert

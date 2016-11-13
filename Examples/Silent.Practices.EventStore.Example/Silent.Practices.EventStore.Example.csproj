@@ -43,6 +43,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj">
+      <Project>{3c507d1b-0d15-4ac7-bcaa-11bfbdce258c}</Project>
+      <Name>Silent.Practices.EventStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj">
+      <Project>{1a7267b3-9dc4-4962-9a30-6675785f5088}</Project>
+      <Name>Silent.Practices.Persistance</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

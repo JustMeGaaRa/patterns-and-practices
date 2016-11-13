@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace Silent.Practices.EventStore
 {
-    public class MemoryEvenAggregateRepository<TEntity> : 
+    public class MemoryEventAggregateRepository<TEntity> : 
         IEventAggregateRepository<TEntity>
         where TEntity : EventAggregate<uint>, new()
     {
         private readonly IEventStore _eventStore;
 
-        public MemoryEvenAggregateRepository(IEventStore eventStore)
+        public MemoryEventAggregateRepository(IEventStore eventStore)
         {
             if (eventStore == null)
             {
@@ -41,7 +41,7 @@ namespace Silent.Practices.EventStore
                 throw new ArgumentNullException(nameof(item));
             }
 
-            ICollection<Event> uncommitted = item.GetUncommitted().ToList();
+            IReadOnlyCollection<Event> uncommitted = item.GetUncommitted();
             return uncommitted.Any() && _eventStore.SaveEvents(item.Id, uncommitted);
         }
     }

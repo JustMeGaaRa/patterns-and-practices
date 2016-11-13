@@ -8,25 +8,25 @@ namespace Silent.Practices.Messaging.Tests
     public class MemoryMessageBusTest
     {
         [Fact]
-        public void Register_NullObject_ShouldThrowException()
+        public void Subscribe_NullObject_ShouldThrowException()
         {
             // Arrange
-            IMessageBus<FakeMessage> messageBus = new MemoryMessageBus<FakeMessage>();
+            IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
 
             // Act, Assert
-            Assert.Throws<ArgumentNullException>(() => messageBus.Register<FakeMessage>(null));
+            Assert.Throws<ArgumentNullException>(() => messageBus.Subscribe<DummyMessage>(null));
         }
 
         [Fact]
-        public void Register_OneHandler_ShouldContainOneHandler()
+        public void Subscribe_OneHandler_ShouldContainOneHandler()
         {
             // Arrange
-            IMessageBus<FakeMessage> messageBus = new MemoryMessageBus<FakeMessage>();
-            IHandler<FakeMessage> fakeMessageHandler = Mock.Of<IHandler<FakeMessage>>();
+            IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
+            IHandler<DummyMessage> fakeMessageHandler = Mock.Of<IHandler<DummyMessage>>();
 
             // Act
-            messageBus.Register(fakeMessageHandler);
-            var handlers = messageBus.GetHandlers<FakeMessage>();
+            messageBus.Subscribe(fakeMessageHandler);
+            var handlers = messageBus.GetSubscriptions<DummyMessage>();
 
             // Assert
             Assert.NotNull(handlers);
@@ -34,50 +34,62 @@ namespace Silent.Practices.Messaging.Tests
         }
 
         [Fact]
-        public void Send_WithHandlerAndNullObject_ShouldThrowException()
+        public void Subscribe_WhenUsingDisposable_ShouldUnsubscribe()
         {
             // Arrange
-            IMessageBus<FakeMessage> messageBus = new MemoryMessageBus<FakeMessage>();
-            IHandler<FakeMessage> fakeMessageHandler = Mock.Of<IHandler<FakeMessage>>();
+            IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
+            IHandler<DummyMessage> fakeMessageHandler = Mock.Of<IHandler<DummyMessage>>();
 
             // Act
-            messageBus.Register(fakeMessageHandler);
+            IDisposable unsubsribable = messageBus.Subscribe(fakeMessageHandler);
+            unsubsribable.Dispose();
+            var handlers = messageBus.GetSubscriptions<DummyMessage>();
 
             // Assert
-            Assert.Throws<ArgumentNullException>(() => messageBus.Send<FakeMessage>(null));
+            Assert.Null(handlers);
         }
 
         [Fact]
-        public void Send_WithoutHandlerButFakeMessage_ShouldThrowException()
+        public void Publish_WithHandlerAndNullObject_ShouldThrowException()
         {
             // Arrange
-            IMessageBus<FakeMessage> messageBus = new MemoryMessageBus<FakeMessage>();
-            FakeMessage fakeMessage = new FakeMessage();
+            IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
+            IHandler<DummyMessage> fakeMessageHandler = Mock.Of<IHandler<DummyMessage>>();
+
+            // Act
+            messageBus.Subscribe(fakeMessageHandler);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => messageBus.Publish<DummyMessage>(null));
+        }
+
+        [Fact]
+        public void Publish_WithoutHandlerButFakeMessage_ShouldThrowException()
+        {
+            // Arrange
+            IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
+            DummyMessage dummyMessage = new DummyMessage();
 
             // Act, Assert
-            Assert.Throws<NotSupportedException>(() => messageBus.Send(fakeMessage));
+            Assert.Throws<NotSupportedException>(() => messageBus.Publish(dummyMessage));
         }
 
         [Fact]
-        public void Send_FakeMessage_ShouldInvokeOneHandler()
+        public void Publish_FakeMessage_ShouldInvokeOneHandler()
         {
             // Arrange
-            IMessageBus<FakeMessage> messageBus = new MemoryMessageBus<FakeMessage>();
-            Mock<IHandler<FakeMessage>> mock = new Mock<IHandler<FakeMessage>>();
-            mock.Setup(x => x.Handle(It.IsNotNull<FakeMessage>()));
-            IHandler<FakeMessage> fakeMessageHandler = mock.Object;
-            FakeMessage fakeMessage = new FakeMessage();
+            IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
+            Mock<IHandler<DummyMessage>> mock = new Mock<IHandler<DummyMessage>>();
+            mock.Setup(x => x.Handle(It.IsNotNull<DummyMessage>()));
+            IHandler<DummyMessage> fakeMessageHandler = mock.Object;
+            DummyMessage dummyMessage = new DummyMessage();
 
             // Act
-            messageBus.Register(fakeMessageHandler);
-            messageBus.Send(fakeMessage);
+            messageBus.Subscribe(fakeMessageHandler);
+            messageBus.Publish(dummyMessage);
 
             // Assert
-            mock.Verify(m => m.Handle(It.IsNotNull<FakeMessage>()), Times.Once);
-        }
-
-        public class FakeMessage
-        {
+            mock.Verify(m => m.Handle(It.IsNotNull<DummyMessage>()), Times.Once);
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     internal sealed class FakeDeletedEvent : Event
     {
-        public uint AggregateId { get; set; }
+        public FakeDeletedEvent(uint id) : base(id)
+        {
+        }
     }
 }

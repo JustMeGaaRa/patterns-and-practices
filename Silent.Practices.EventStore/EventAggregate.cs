@@ -9,7 +9,7 @@ namespace Silent.Practices.EventStore
         private readonly Dictionary<Type, Action<Event>> _actualHandlers = new Dictionary<Type, Action<Event>>();
         private readonly List<Event> _uncommittedChanges = new List<Event>();
 
-        public IEnumerable<Event> GetUncommitted()
+        public IReadOnlyCollection<Event> GetUncommitted()
         {
             return _uncommittedChanges;
         }
@@ -32,10 +32,10 @@ namespace Silent.Practices.EventStore
             }
         }
 
-        protected void RegisterHandler<TEvent>(Action<Event> handler)
+        protected void OnEvent<TEvent>(Action<TEvent> handler) where TEvent : Event
         {
             Type eventType = typeof(TEvent);
-            _actualHandlers[eventType] = handler;
+            _actualHandlers[eventType] = x => handler(x as TEvent);
         }
 
         protected void Apply(Event instance)

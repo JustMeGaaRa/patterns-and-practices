@@ -2,7 +2,9 @@
 {
     internal sealed class FakeCreatedEvent : Event
     {
-        public uint AggregateId { get; set; }
+        public FakeCreatedEvent(uint id) : base(id)
+        {
+        }
 
         public string Value { get; set; }
     }

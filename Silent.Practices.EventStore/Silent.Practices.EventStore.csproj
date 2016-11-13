@@ -37,13 +37,16 @@
     <Compile Include="EventAggregate.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="IEventAggregateRepository.cs" />
-    <Compile Include="IEventPublisher.cs" />
     <Compile Include="IEventStore.cs" />
-    <Compile Include="MemoryEvenAggregateRepository.cs" />
+    <Compile Include="MemoryEventAggregateRepository.cs" />
     <Compile Include="MemoryEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj">
+      <Project>{498AD90E-0EC6-4F70-86CA-EFC5A2905A94}</Project>
+      <Name>Silent.Practices.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj">
       <Project>{1a7267b3-9dc4-4962-9a30-6675785f5088}</Project>
       <Name>Silent.Practices.Persistance</Name>

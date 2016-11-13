@@ -51,7 +51,7 @@ namespace Silent.Practices.EventStore.Tests
             IEventStore eventStore = new MemoryEventStore();
 
             // Act
-            ICollection<Event> result = eventStore.GetEventsById(1);
+            IReadOnlyCollection<Event> result = eventStore.GetEventsById(1);
 
             // Assert
             Assert.Empty(result);
@@ -67,7 +67,7 @@ namespace Silent.Practices.EventStore.Tests
             eventStore.SaveEvents(eventAggregateId, fakeEvents);
 
             // Act
-            ICollection<Event> result = eventStore.GetEventsById(2);
+            IReadOnlyCollection<Event> result = eventStore.GetEventsById(2);
 
             // Assert
             Assert.Empty(result);
