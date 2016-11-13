@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Domain.Contracts", "Silent.Practices.DDD.Contracts\Silent.Practices.Domain.Contracts.csproj", "{B70CB85D-1E34-4553-9E60-A0426512FC9E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.EventStore", "Silent.Practices.EventStore\Silent.Practices.EventStore.csproj", "{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Messaging", "Silent.Practices.Messaging\Silent.Practices.Messaging.csproj", "{6F9329CD-BA5A-4759-8977-9EFF024D24B7}"
@@ -31,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B70CB85D-1E34-4553-9E60-A0426512FC9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B70CB85D-1E34-4553-9E60-A0426512FC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B70CB85D-1E34-4553-9E60-A0426512FC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B70CB85D-1E34-4553-9E60-A0426512FC9E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}.Release|Any CPU.ActiveCfg = Release|Any CPU
