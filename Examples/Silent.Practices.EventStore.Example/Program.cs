@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Silent.Practices.Persistance;
 
 namespace Silent.Practices.EventStore.Example
 {
@@ -8,74 +9,110 @@ namespace Silent.Practices.EventStore.Example
         private static void Main()
         {
             IEventStore eventStore = new MemoryEventStore();
-            IEventAggregateRepository<Order> orderRepository =
-                new MemoryEventAggregateRepository<Order>(eventStore);
+
+            IEventAggregateRepository<OrderAggregate> orderAggregateRepository =
+                new MemoryEventAggregateRepository<OrderAggregate>(eventStore);
+            IEventAggregateRepository<OrderItemAggregate> orderitemAggregateRepository =
+                new MemoryEventAggregateRepository<OrderItemAggregate>(eventStore);
+
+            IRepository<OrderDto> orderRepository = new MemoryRepository<OrderDto>();
+            IRepository<OrderItemDto> orderItemRepository = new MemoryRepository<OrderItemDto>();
 
             for (uint i = 0; i < 10; i++)
             {
-                Order order = new Order(i);
-                order.Date = DateTime.Now;
-                orderRepository.Save(order);
+                OrderAggregate orderAggregate = new OrderAggregate(i);
+                orderAggregate.ChangeDate(DateTime.Now.AddDays(1));
+                orderAggregate.Delete();
+                orderAggregateRepository.Save(orderAggregate);
             }
-            
-            Order found = orderRepository.GetById(1);
 
-            Console.WriteLine($"{nameof(Order.Id)}: {found.Id}");
-            Console.WriteLine($"{nameof(Order.Date)}: {found.Date}");
+            OrderDto found = orderRepository.GetById(1);
+
+            Console.WriteLine($"{nameof(OrderDto.Id)}: {found.Id}");
+            Console.WriteLine($"{nameof(OrderDto.Date)}: {found.Date}");
             Console.ReadKey();
         }
 
-        public class Order : EventAggregate<uint>
+        #region Event Aggregates
+
+        public class OrderAggregate : EventAggregate<uint>
         {
-            public Order()
+            public OrderAggregate()
             {
-                Items = new List<OrderItem>();
-                OnEvent<OrderCreatedEvent>(x => Id = x.EntityId);
-                OnEvent<OrderDateChangedEvent>(x => Date = x.Date);
-                OnEvent<OrderDeletedEvent>(x => { });
             }
 
-            public Order(uint id) : this()
+            public OrderAggregate(uint id) : this()
             {
-                Apply(new OrderCreatedEvent(id));
+                ApplyEvent(new OrderCreatedEvent(id));
+            }
+
+            public void ChangeDate(DateTime dateTime)
+            {
+                ApplyEvent(new OrderDateChangedEvent(Id, dateTime));
+            }
+
+            public void Delete()
+            {
+                ApplyEvent(new OrderDeletedEvent(Id));
+            }
+        }
+
+        public class OrderItemAggregate : EventAggregate<uint>
+        {
+            
+        }
+
+        #endregion
+
+        #region Events
+
+        public class OrderCreatedEvent : Event
+        {
+            public OrderCreatedEvent(uint id) : base(id)
+            {
+            }
+        }
+
+        public class OrderDateChangedEvent : Event
+        {
+            public OrderDateChangedEvent(uint id, DateTime date) : base(id)
+            {
+                Date = date;
+            }
+
+            public DateTime Date { get; set; }
+        }
+
+        public class OrderDeletedEvent : Event
+        {
+            public OrderDeletedEvent(uint id) : base(id)
+            {
+            }
+        }
+
+        #endregion
+
+        #region Domain Entities
+
+        public class OrderDto : EntityBase<uint>
+        {
+            public OrderDto()
+            {
+                Items = new List<OrderItemDto>();
             }
 
             public DateTime Date { get; set; }
 
-            public ICollection<OrderItem> Items { get; }
-
-            private class OrderCreatedEvent : Event
-            {
-                public OrderCreatedEvent(uint id) : base(id)
-                {
-                }
-            }
-
-            private class OrderDateChangedEvent : Event
-            {
-                public OrderDateChangedEvent(uint id, DateTime date) : base(id)
-                {
-                    Date = date;
-                }
-
-                public DateTime Date { get; set; }
-            }
-
-            private class OrderDeletedEvent : Event
-            {
-                public OrderDeletedEvent(uint id) : base(id)
-                {
-                }
-            }
+            public List<OrderItemDto> Items { get; }
         }
 
-        public class OrderItem
+        public class OrderItemDto : EntityBase<uint>
         {
-            public uint ItemId { get; set; }
-
             public string Title { get; set; }
 
             public double Price { get; set; }
         }
+
+        #endregion
     }
 }

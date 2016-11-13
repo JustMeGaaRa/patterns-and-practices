@@ -2,8 +2,8 @@
 
 namespace Silent.Practices.Patterns
 {
-    public interface IFactory<out TItem>
+    public interface IFactory<out TEntity>
     {
-        IEnumerable<TItem> Create(params object[] parameters);
+        IEnumerable<TEntity> Create(params object[] parameters);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Silent.Practices.Extensions.Tests
@@ -57,6 +58,32 @@ namespace Silent.Practices.Extensions.Tests
 
             // Act, Assert
             Assert.Throws<NotSupportedException>(() => fakeObject.Patch(fakeObject));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(5)]
+        [InlineData("Hello World!")]
+        public void AsArray_OnObject_ShouldCreateArray(object dummy)
+        {
+            // Act
+            object[] array = dummy.AsArray();
+
+            // Assert
+            Assert.NotEmpty(array);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(5)]
+        [InlineData("Hello World!")]
+        public void AsList_OnObject_ShouldCreateArray(object dummy)
+        {
+            // Act
+            List<object> array = dummy.AsList();
+
+            // Assert
+            Assert.NotEmpty(array);
         }
 
         public class FakeReadWriteObject

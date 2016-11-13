@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1A7267B3-9DC4-4962-9A30-6675785F5088}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{D95F8787-2CD6-4DCD-BC41-7BAFE17D9873}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Silent.Practices.Persistance</RootNamespace>
-    <AssemblyName>Silent.Practices.Persistance</AssemblyName>
+    <RootNamespace>Silent.Practices.CQRS.Example</RootNamespace>
+    <AssemblyName>Silent.Practices.CQRS.Example</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,22 +37,36 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityBase.cs" />
-    <Compile Include="IRepository.cs" />
-    <Compile Include="IUnitOfWork.cs" />
-    <Compile Include="IUnitOfWorkFactory.cs" />
-    <Compile Include="MemoryRepository.cs" />
-    <Compile Include="MemoryUnitOfWork.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj">
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj">
+      <Project>{77017a02-e505-4903-bdc7-27dd09fa4e40}</Project>
+      <Name>Silent.Practices.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj">
+      <Project>{3c507d1b-0d15-4ac7-bcaa-11bfbdce258c}</Project>
+      <Name>Silent.Practices.EventStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj">
       <Project>{498ad90e-0ec6-4f70-86ca-efc5a2905a94}</Project>
       <Name>Silent.Practices.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj">
-      <Project>{4AD13614-CCA0-4ACC-9E87-00E381D4E2EC}</Project>
+    <ProjectReference Include="..\..\Silent.Practices.Messaging\Silent.Practices.Messaging.csproj">
+      <Project>{6f9329cd-ba5a-4759-8977-9eff024d24b7}</Project>
+      <Name>Silent.Practices.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj">
+      <Project>{4ad13614-cca0-4acc-9e87-00e381d4e2ec}</Project>
       <Name>Silent.Practices.Patterns</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj">
+      <Project>{1a7267b3-9dc4-4962-9a30-6675785f5088}</Project>
+      <Name>Silent.Practices.Persistance</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -37,6 +37,7 @@
     <Compile Include="EventAggregate.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="IEventAggregateRepository.cs" />
+    <Compile Include="IEventHandler.cs" />
     <Compile Include="IEventStore.cs" />
     <Compile Include="MemoryEventAggregateRepository.cs" />
     <Compile Include="MemoryEventStore.cs" />
@@ -46,6 +47,10 @@
     <ProjectReference Include="..\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj">
       <Project>{498AD90E-0EC6-4F70-86CA-EFC5A2905A94}</Project>
       <Name>Silent.Practices.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj">
+      <Project>{4AD13614-CCA0-4ACC-9E87-00E381D4E2EC}</Project>
+      <Name>Silent.Practices.Patterns</Name>
     </ProjectReference>
     <ProjectReference Include="..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj">
       <Project>{1a7267b3-9dc4-4962-9a30-6675785f5088}</Project>

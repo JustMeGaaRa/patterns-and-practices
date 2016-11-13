@@ -153,9 +153,7 @@ namespace Silent.Practices.EventStore.Tests
 
         private FakeEventAggregate CreateDirtyFake(uint aggregateId)
         {
-            FakeEventAggregate fakeEventAggregate = new FakeEventAggregate(aggregateId);
-            fakeEventAggregate.Value = "New Value";
-            return fakeEventAggregate;
+            return new FakeEventAggregate(aggregateId);
         }
     }
 }

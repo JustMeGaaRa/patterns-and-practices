@@ -1,10 +1,10 @@
 ﻿namespace Silent.Practices.Persistance
 {
-    public interface IRepository<TItem, in TKey> where TItem : EntityBase<TKey>
+    public interface IRepository<TEntity, in TKey> where TEntity : EntityBase<TKey>
     {
-        TItem GetById(TKey id);
+        TEntity GetById(TKey id);
 
-        bool Save(TItem item);
+        bool Save(TEntity item);
     }
 
     public interface IRepository<TItem> : IRepository<TItem, uint> where TItem : EntityBase<uint>

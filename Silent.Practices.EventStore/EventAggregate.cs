@@ -6,7 +6,6 @@ namespace Silent.Practices.EventStore
 {
     public abstract class EventAggregate<TKey> : EntityBase<TKey>
     {
-        private readonly Dictionary<Type, Action<Event>> _actualHandlers = new Dictionary<Type, Action<Event>>();
         private readonly List<Event> _uncommittedChanges = new List<Event>();
 
         public IReadOnlyCollection<Event> GetUncommitted()
@@ -28,36 +27,21 @@ namespace Silent.Practices.EventStore
 
             foreach (Event historyEvent in historicalEvents)
             {
-                Apply(historyEvent, false);
+                ApplyEvent(historyEvent, false);
             }
         }
 
-        protected void OnEvent<TEvent>(Action<TEvent> handler) where TEvent : Event
+        protected void ApplyEvent(Event instance)
         {
-            Type eventType = typeof(TEvent);
-            _actualHandlers[eventType] = x => handler(x as TEvent);
+            ApplyEvent(instance, true);
         }
 
-        protected void Apply(Event instance)
-        {
-            Apply(instance, true);
-        }
-
-        private void Apply(Event instance, bool isNew)
+        private void ApplyEvent(Event instance, bool isNew)
         {
             if (instance == null)
             {
                 throw new ArgumentNullException(nameof(instance), "Event instance cannot be null.");
             }
-
-            Type eventType = instance.GetType();
-
-            if (!_actualHandlers.ContainsKey(eventType))
-            {
-                throw new NotSupportedException($"No handler of type {eventType.FullName} is present");
-            }
-
-            _actualHandlers[eventType].Invoke(instance);
 
             if (isNew)
             {

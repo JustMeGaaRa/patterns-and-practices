@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Silent.Practices.Extensions
@@ -20,6 +21,16 @@ namespace Silent.Practices.Extensions
             {
                 property.SetValue(original, property.GetValue(modified, null), null);
             }
+        }
+
+        public static T[] AsArray<T>(this T instance)
+        {
+            return new[] { instance };
+        }
+
+        public static List<T> AsList<T>(this T instance)
+        {
+            return new List<T>(1) { instance };
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Silent.Practices.EventStore.Tests
         public void GetUncommitted_OnCreatedAggregate_ShouldReturnCollection()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1) { Value = string.Empty };
+            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1);
 
             // Act
             IEnumerable<Event> result = eventAggregate.GetUncommitted();
@@ -53,7 +53,7 @@ namespace Silent.Practices.EventStore.Tests
         public void MarkAsCommitted_OnCreatedAggregate_ShouldNotContainUncommitted()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1) { Value = string.Empty };
+            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1);
 
             // Act
             eventAggregate.MarkAsCommitted();
