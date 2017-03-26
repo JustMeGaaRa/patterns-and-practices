@@ -78,7 +78,7 @@ namespace Silent.Practices.EventStore.Tests
         {
             // Arrange
             uint eventAggregateId = 1;
-            Event createdEvent = new FakeCreatedEvent(eventAggregateId) { Value = "New Value" };
+            Event createdEvent = new FakeCreatedEvent(eventAggregateId);
             IEnumerable<Event> historyEvents = new [] { createdEvent };
             EventAggregate<uint> eventAggregate = new FakeEventAggregate();
 

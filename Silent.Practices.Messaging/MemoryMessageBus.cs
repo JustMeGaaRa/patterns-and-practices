@@ -22,8 +22,7 @@ namespace Silent.Practices.Messaging
             }
 
             Type messageType = typeof(TConcrete);
-            EnsureTypeRegistratin(messageType);
-            _messageHandlers[messageType].Add(handler);
+            EnsureTypeRegistration(messageType, handler);
             return new UnsubscribeDisposable<TConcrete>(_messageHandlers);
         }
 
@@ -37,34 +36,29 @@ namespace Silent.Practices.Messaging
             Type messageType = message.GetType();
             var handlers = InnerGetHandlers<TConcrete>();
 
-            if (handlers == null)
+            if(handlers != null)
             {
-                throw new NotSupportedException($"No handlers of type {messageType.Name} were registered");
-            }
-
-            foreach (var handler in handlers)
-            {
-                handler.Handle(message);
+                foreach (var handler in handlers)
+                {
+                    handler.Handle(message);
+                }
             }
         }
 
-        public IReadOnlyCollection<IHandler<TConcrete>> GetSubscriptions<TConcrete>() where TConcrete : TMessage
-        {
-            return InnerGetHandlers<TConcrete>();
-        }
-
-        private void EnsureTypeRegistratin(Type type)
+        private void EnsureTypeRegistration(Type type, object handler)
         {
             if (!_messageHandlers.ContainsKey(type))
             {
                 _messageHandlers.Add(type, new List<object>());
             }
+
+            _messageHandlers[type].Add(handler);
         }
 
-        private IReadOnlyCollection<IHandler<TConcrete>> InnerGetHandlers<TConcrete>()
+        private IEnumerable<IHandler<TConcrete>> InnerGetHandlers<TConcrete>()
         {
             return _messageHandlers.ContainsKey(typeof(TConcrete))
-                ? _messageHandlers[typeof(TConcrete)].Cast<IHandler<TConcrete>>().ToList()
+                ? _messageHandlers[typeof(TConcrete)].Cast<IHandler<TConcrete>>()
                 : default(IReadOnlyCollection<IHandler<TConcrete>>);
         }
 

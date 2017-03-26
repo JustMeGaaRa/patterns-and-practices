@@ -1,4 +1,5 @@
 using System;
+using Moq;
 using Xunit;
 
 namespace Silent.Practices.Messaging.Tests
@@ -20,15 +21,15 @@ namespace Silent.Practices.Messaging.Tests
         {
             // Arrange
             IMessageBus<DummyMessage> messageBus = new MemoryMessageBus<DummyMessage>();
-            Action<DummyMessage> messageHandler = x => { /* simply do nothing */ };
+            Mock<Action<DummyMessage>> handlerMock = new Mock<Action<DummyMessage>>();
+            Action<DummyMessage> fakeMessageHandler = handlerMock.Object;
 
             // Act
-            messageBus.Subscribe(messageHandler);
-            var handlers = messageBus.GetSubscriptions<DummyMessage>();
+            messageBus.Subscribe(fakeMessageHandler);
+            messageBus.Publish(new DummyMessage());
 
             // Assert
-            Assert.NotNull(handlers);
-            Assert.NotEmpty(handlers);
+            handlerMock.Verify(m => m(It.IsNotNull<DummyMessage>()), Times.Once);
         }
     }
 }
