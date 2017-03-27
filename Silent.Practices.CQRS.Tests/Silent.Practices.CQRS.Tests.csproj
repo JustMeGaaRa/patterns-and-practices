@@ -61,11 +61,35 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="CommandTest.cs" />
+    <Compile Include="Fakes\FakeCommand.cs" />
+    <Compile Include="Fakes\FakeFireForgetCommandHandler.cs" />
+    <Compile Include="Fakes\FakeFireForgetCommandProcessor.cs" />
+    <Compile Include="Fakes\FakeQuery.cs" />
+    <Compile Include="Fakes\FakeQueryHandler.cs" />
+    <Compile Include="Fakes\FakeQueryProcessor.cs" />
+    <Compile Include="Fakes\FakeResult.cs" />
+    <Compile Include="Fakes\FakeStatefulCommandHandler.cs" />
+    <Compile Include="Fakes\FakeStatefulCommandProcessor.cs" />
+    <Compile Include="Fakes\FakeStatus.cs" />
+    <Compile Include="Fakes\FakeUnregisteredCommand.cs" />
+    <Compile Include="Fakes\FakeUnregisteredQuery.cs" />
+    <Compile Include="FireForgetCommandProcessorBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryProcessorBaseTest.cs" />
+    <Compile Include="StatefulCommandProcessorBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj">
+      <Project>{77017a02-e505-4903-bdc7-27dd09fa4e40}</Project>
+      <Name>Silent.Practices.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj">
+      <Project>{4ad13614-cca0-4acc-9e87-00e381d4e2ec}</Project>
+      <Name>Silent.Practices.Patterns</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

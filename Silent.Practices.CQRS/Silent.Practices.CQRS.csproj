@@ -40,9 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandHandler.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Processors\FireForgetCommandProcessorBase.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ICommandHandler.cs" />
+    <Compile Include="Processors\ICommandProcessor.cs" />
+    <Compile Include="Processors\StatefulCommandProcessorBase.cs" />
+    <Compile Include="Processors\QueryProcessorBase.cs" />
+    <Compile Include="Queries\IQueryHandler.cs" />
+    <Compile Include="Processors\IQueryProcessor.cs" />
+    <Compile Include="Queries\IQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
