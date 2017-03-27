@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,11 @@ namespace Silent.Practices.Extensions
 {
     public static class ObjectExtensions
     {
+        public static PropertyInfo[] GetProperties(this Type instance)
+        {
+            return instance.GetTypeInfo().GetProperties();
+        }
+
         public static void Patch<TSource>(this TSource original, TSource modified)
         {
             if (ReferenceEquals(original, modified))
