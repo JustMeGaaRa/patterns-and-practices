@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Silent.Practices.EventStore;
 using Silent.Practices.Messaging;
 using Silent.Practices.Persistance;
+using Silent.Practices.CQRS.Commands;
 
 namespace Silent.Practices.CQRS.Example
 {
@@ -81,14 +82,14 @@ namespace Silent.Practices.CQRS.Example
 
         #region Commands
 
-        public class CreateOrderCommand : Command
+        public class CreateOrderCommand : CommandBase
         {
             public CreateOrderCommand(uint id) : base(id)
             {
             }
         }
 
-        public class ChangeOrderDateCommand : Command
+        public class ChangeOrderDateCommand : CommandBase
         {
             public ChangeOrderDateCommand(uint id, DateTime date) : base(id)
             {
@@ -98,7 +99,7 @@ namespace Silent.Practices.CQRS.Example
             public DateTime Date { get; set; }
         }
 
-        public class DeleteOrderCommand : Command
+        public class DeleteOrderCommand : CommandBase
         {
             public DeleteOrderCommand(uint id) : base(id)
             {
