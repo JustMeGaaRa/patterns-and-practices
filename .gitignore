@@ -53,3 +53,9 @@ Temporary Items
 bin/
 obj/
 packages/
+
+# Artifacts
+artifacts/
+build/
+*.nupkg
+*.exe
