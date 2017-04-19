@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj" />
-    <ProjectReference Include="..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj" />
+    <ProjectReference Include="..\..\src\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj" />
   </ItemGroup>
 
   <ItemGroup>

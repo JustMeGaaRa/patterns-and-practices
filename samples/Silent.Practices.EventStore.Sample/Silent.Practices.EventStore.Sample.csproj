@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
+    <ProjectReference Include="..\..\src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
   </ItemGroup>
 
 </Project>
