@@ -7,31 +7,34 @@ namespace Silent.Practices.Persistance.Tests
     public class MemoryRepositoryTest
     {
         [Fact]
-        public void Save_NewEntity_ShouldReturnTrue()
+        public void Add_NewEntity_ShouldReturnTrue()
         {
             // Arrange
             IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
             FakeEntity fakeEntity = new FakeEntity { Id = 1 };
 
             // Act
-            bool result = repository.Save(fakeEntity);
+            bool result = repository.Add(fakeEntity);
 
             // Assert
             Assert.True(result);
         }
 
         [Fact]
-        public void Save_NullObject_ShouldThrowException()
+        public void Add_NullObject_ShouldReturnFalse()
         {
             // Arrange
             IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
 
-            // Act, Assert
-            Assert.Throws<ArgumentNullException>(() => repository.Save(null));
+            // Act
+            bool result = repository.Add(null);
+
+            // Assert
+            Assert.False(result);
         }
 
         [Fact]
-        public void Save_ModifiedViaNewInstance_ShouldUpdateOriginal()
+        public void Add_ModifiedViaNewInstance_ShouldUpdateOriginal()
         {
             // Arrange
             string oldValue = "Old Value";
@@ -51,8 +54,8 @@ namespace Silent.Practices.Persistance.Tests
             };
 
             // Act
-            bool result = repository.Save(originalEntity);
-            result = result && repository.Save(modifiedEntity);
+            bool result = repository.Add(originalEntity);
+            result = result && repository.Add(modifiedEntity);
 
             // Assert
             Assert.True(result);
@@ -78,7 +81,7 @@ namespace Silent.Practices.Persistance.Tests
             FakeEntity fakeEntity = new FakeEntity { Id = 1 };
 
             // Act
-            repository.Save(fakeEntity);
+            repository.Add(fakeEntity);
 
             // Assert
             Assert.Throws<KeyNotFoundException>(() => repository.GetById(2));
@@ -93,7 +96,7 @@ namespace Silent.Practices.Persistance.Tests
             FakeEntity fakeEntity = new FakeEntity { Id = entityId };
 
             // Act
-            repository.Save(fakeEntity);
+            repository.Add(fakeEntity);
             var result = repository.GetById(entityId);
 
             // Assert

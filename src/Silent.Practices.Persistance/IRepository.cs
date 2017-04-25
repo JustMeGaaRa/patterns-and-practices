@@ -1,13 +1,21 @@
-﻿namespace Silent.Practices.Persistance
+﻿using System.Collections.Generic;
+
+namespace Silent.Practices.Persistance
 {
-    public interface IRepository<TEntity, in TKey> where TEntity : EntityBase<TKey>
+    public interface IRepository<TEntity, in TKey> where TEntity : IEntity<TKey>
     {
         TEntity GetById(TKey id);
 
-        bool Save(TEntity item);
+        ICollection<TEntity> Get();
+
+        bool Add(TEntity item);
+
+        bool Update(TKey key, TEntity entity);
+
+        bool Delete(TKey key);
     }
 
-    public interface IRepository<TItem> : IRepository<TItem, uint> where TItem : EntityBase<uint>
+    public interface IRepository<TItem> : IRepository<TItem, uint> where TItem : IEntity<uint>
     {
     }
 }

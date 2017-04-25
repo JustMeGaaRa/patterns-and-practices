@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Silent.Practices.EventStore
 {
@@ -9,7 +11,16 @@ namespace Silent.Practices.EventStore
         public IReadOnlyCollection<Event> GetEventsById(uint eventAggregateId)
         {
             IReadOnlyCollection<Event> events = _events.ContainsKey(eventAggregateId)
-                ? _events[eventAggregateId]
+                ? _events[eventAggregateId].OrderBy(x => x.Timestamp).ToList()
+                : new List<Event>();
+
+            return events;
+        }
+
+        public IReadOnlyCollection<Event> GetEvents(Func<Event, bool> filter = null)
+        {
+            IReadOnlyCollection<Event> events = filter != null
+                ? _events.Values.SelectMany(x => x).Where(filter).OrderBy(x => x.Timestamp).ToList()
                 : new List<Event>();
 
             return events;

@@ -2,7 +2,7 @@
 
 namespace Silent.Practices.Persistance
 {
-    public abstract class EntityBase<TKey>
+    public abstract class EntityBase<TKey> : IEntity<TKey>
     {
         public TKey Id { get; set; }
 

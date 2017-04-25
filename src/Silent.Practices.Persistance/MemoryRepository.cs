@@ -1,39 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Silent.Practices.Extensions;
 
 namespace Silent.Practices.Persistance
 {
-    public sealed class MemoryRepository<TEntity> : IRepository<TEntity> where TEntity : EntityBase<uint>
+    public class MemoryRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
     {
-        private readonly Dictionary<uint, TEntity> _entities = new Dictionary<uint, TEntity>();
+        protected readonly Dictionary<TKey, TEntity> Entities = new Dictionary<TKey, TEntity>();
 
-        public TEntity GetById(uint id)
+        public virtual TEntity GetById(TKey id)
         {
-            if (!_entities.ContainsKey(id))
+            if (!Entities.ContainsKey(id))
             {
                 throw new KeyNotFoundException();
             }
 
-            return _entities[id];
+            return Entities[id];
         }
 
-        public bool Save(TEntity item)
+        public virtual ICollection<TEntity> Get()
+        {
+            return Entities.Values.ToList();
+        }
+
+        public virtual bool Add(TEntity item)
         {
             if (item == null)
             {
-                throw new ArgumentNullException(nameof(item));
+                return false;
             }
 
-            if (_entities.ContainsKey(item.Id))
+            if (Entities.ContainsKey(item.Id))
             {
-                var original = _entities[item.Id];
-                original.Patch(item);
+                Entities[item.Id].Patch(item);
                 return true;
             }
 
-            _entities.Add(item.Id, item);
+            Entities.Add(item.Id, item);
             return true;
         }
+
+        public virtual bool Update(TKey key, TEntity entity)
+        {
+            if (entity == null)
+            {
+                return false;
+            }
+
+            if (!Entities.ContainsKey(key))
+            {
+                return false;
+            }
+
+            Entities[key].Patch(entity);
+            return true;
+        }
+
+        public virtual bool Delete(TKey key)
+        {
+            if (!Entities.ContainsKey(key))
+            {
+                return false;
+            }
+
+            return Entities.Remove(key);
+        }
+    }
+
+    public class MemoryRepository<TEntity> : MemoryRepository<TEntity, uint>, IRepository<TEntity>
+        where TEntity : IEntity<uint>
+    {
     }
 }

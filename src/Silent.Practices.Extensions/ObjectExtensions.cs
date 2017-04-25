@@ -16,7 +16,7 @@ namespace Silent.Practices.Extensions
         {
             if (ReferenceEquals(original, modified))
             {
-                throw new NotSupportedException("You cannot patch an object on to itself.");
+                return;
             }
 
             var properties = typeof(TSource).GetProperties()

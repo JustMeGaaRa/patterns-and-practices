@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Silent.Practices.Persistance;
 
-namespace Silent.Practices.EventStore.Example
+namespace Silent.Practices.EventStore.Sample
 {
     internal sealed class Program
     {
@@ -23,7 +23,7 @@ namespace Silent.Practices.EventStore.Example
                 OrderAggregate orderAggregate = new OrderAggregate(i);
                 orderAggregate.ChangeDate(DateTime.Now.AddDays(1));
                 orderAggregate.Delete();
-                orderAggregateRepository.Save(orderAggregate);
+                orderAggregateRepository.Add(orderAggregate);
             }
 
             OrderDto found = orderRepository.GetById(1);

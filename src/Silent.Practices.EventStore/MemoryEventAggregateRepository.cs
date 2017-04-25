@@ -4,20 +4,14 @@ using System.Linq;
 
 namespace Silent.Practices.EventStore
 {
-    public class MemoryEventAggregateRepository<TEntity> : 
-        IEventAggregateRepository<TEntity>
+    public class MemoryEventAggregateRepository<TEntity> : IEventAggregateRepository<TEntity>
         where TEntity : EventAggregate<uint>, new()
     {
         private readonly IEventStore _eventStore;
 
         public MemoryEventAggregateRepository(IEventStore eventStore)
         {
-            if (eventStore == null)
-            {
-                throw new ArgumentNullException(nameof(eventStore));
-            }
-
-            _eventStore = eventStore;
+            _eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
         }
 
         public TEntity GetById(uint id)
@@ -34,7 +28,15 @@ namespace Silent.Practices.EventStore
             return eventAggregate;
         }
 
-        public bool Save(TEntity item)
+        public ICollection<TEntity> Get()
+        {
+            return _eventStore.GetEvents()
+                .GroupBy(x => x.EntityId)
+                .Select(x => GetById(x.Key))
+                .ToList();
+        }
+
+        public bool Add(TEntity item)
         {
             if (item == null)
             {
@@ -43,6 +45,16 @@ namespace Silent.Practices.EventStore
 
             IReadOnlyCollection<Event> uncommitted = item.GetUncommitted();
             return uncommitted.Any() && _eventStore.SaveEvents(item.Id, uncommitted);
+        }
+
+        public bool Update(uint key, TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(uint key)
+        {
+            throw new NotImplementedException();
         }
     }
 }

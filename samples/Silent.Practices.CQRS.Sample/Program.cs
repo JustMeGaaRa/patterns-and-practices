@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Silent.Practices.CQRS.Commands;
 using Silent.Practices.EventStore;
 using Silent.Practices.Messaging;
 using Silent.Practices.Persistance;
-using Silent.Practices.CQRS.Commands;
 
-namespace Silent.Practices.CQRS.Example
+namespace Silent.Practices.CQRS.Sample
 {
     internal sealed class Program
     {
@@ -125,7 +125,7 @@ namespace Silent.Practices.CQRS.Example
             public void Handle(CreateOrderCommand instance)
             {
                 OrderAggregate orderAggregate = new OrderAggregate(instance.EntityId);
-                _unitOfWork.GetRepository<OrderAggregate>().Save(orderAggregate);
+                _unitOfWork.GetRepository<OrderAggregate>().Add(orderAggregate);
             }
 
             public void Handle(ChangeOrderDateCommand instance)
@@ -134,7 +134,7 @@ namespace Silent.Practices.CQRS.Example
                     .GetRepository<OrderAggregate>()
                     .GetById(instance.EntityId);
                 orderAggregate.ChangeDate(instance.Date);
-                _unitOfWork.GetRepository<OrderAggregate>().Save(orderAggregate);
+                _unitOfWork.GetRepository<OrderAggregate>().Add(orderAggregate);
             }
 
             public void Handle(DeleteOrderCommand instance)
@@ -143,7 +143,7 @@ namespace Silent.Practices.CQRS.Example
                     .GetRepository<OrderAggregate>()
                     .GetById(instance.EntityId);
                 orderAggregate.Delete();
-                _unitOfWork.GetRepository<OrderAggregate>().Save(orderAggregate);
+                _unitOfWork.GetRepository<OrderAggregate>().Add(orderAggregate);
             }
         }
 
@@ -250,14 +250,14 @@ namespace Silent.Practices.CQRS.Example
             public void Handle(OrderCreatedEvent instance)
             {
                 OrderDto order = new OrderDto { Id = instance.EntityId };
-                _unitOfWork.GetRepository<OrderDto>().Save(order);
+                _unitOfWork.GetRepository<OrderDto>().Add(order);
             }
 
             public void Handle(OrderDateChangedEvent instance)
             {
                 OrderDto order = _unitOfWork.GetRepository<OrderDto>().GetById(instance.EntityId);
                 order.Date = instance.Date;
-                _unitOfWork.GetRepository<OrderDto>().Save(order);
+                _unitOfWork.GetRepository<OrderDto>().Add(order);
             }
 
             public void Handle(OrderDeletedEvent instance)

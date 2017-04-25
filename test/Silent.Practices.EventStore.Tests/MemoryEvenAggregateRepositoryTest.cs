@@ -17,7 +17,7 @@ namespace Silent.Practices.EventStore.Tests
         }
 
         [Fact]
-        public void Save_NullObject_ShouldThrowException()
+        public void Add_NullObject_ShouldThrowException()
         {
             // Arrange
             IEventStore eventStore = CreateDummyEventStore();
@@ -25,11 +25,11 @@ namespace Silent.Practices.EventStore.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act, Assert
-            Assert.Throws<ArgumentNullException>(() => repository.Save(null));
+            Assert.Throws<ArgumentNullException>(() => repository.Add(null));
         }
 
         [Fact]
-        public void Save_EmptyFakeObject_ShouldBeIgnored()
+        public void Add_EmptyFakeObject_ShouldBeIgnored()
         {
             // Arrange
             Mock<IEventStore> eventStoreMock = CreateEventStoreMock();
@@ -39,7 +39,7 @@ namespace Silent.Practices.EventStore.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            bool result = repository.Save(fakeEventAggregate);
+            bool result = repository.Add(fakeEventAggregate);
 
             // Assert
             Assert.False(result);
@@ -51,7 +51,7 @@ namespace Silent.Practices.EventStore.Tests
         }
 
         [Fact]
-        public void Save_FakeObject_ShouldBeSaved()
+        public void Add_FakeObject_ShouldBeSaved()
         {
             // Arrange
             Mock<IEventStore> eventStoreMock = CreateEventStoreMock();
@@ -61,7 +61,7 @@ namespace Silent.Practices.EventStore.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            bool result = repository.Save(fakeEventAggregate);
+            bool result = repository.Add(fakeEventAggregate);
 
             // Assert
             Assert.True(result);
