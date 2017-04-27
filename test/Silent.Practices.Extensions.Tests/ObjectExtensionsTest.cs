@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 
 namespace Silent.Practices.Extensions.Tests
@@ -45,21 +44,7 @@ namespace Silent.Practices.Extensions.Tests
             Assert.NotEqual(fakeObjectTarget.Id, fakeObjectSource.Id);
             Assert.Equal(fakeObjectTarget.Value, fakeObjectSource.Value);
         }
-
-        [Fact]
-        public void Patch_OnSameInstance_ShouldThrowException()
-        {
-            // Arrange
-            FakeReadWriteObject fakeObject = new FakeReadWriteObject
-            {
-                Id = 1,
-                Value = "Value"
-            };
-
-            // Act, Assert
-            Assert.Throws<NotSupportedException>(() => fakeObject.Patch(fakeObject));
-        }
-
+        
         [Theory]
         [InlineData(null)]
         [InlineData(5)]

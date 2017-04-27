@@ -2,7 +2,7 @@
 
 namespace Silent.Practices.EventStore
 {
-    public interface IEventHandler<in TEvent> : IHandler<TEvent> where TEvent : Event
+    public interface IEventHandler<in TEvent> : IHandler<TEvent> where TEvent : IEvent
     {
     }
 }

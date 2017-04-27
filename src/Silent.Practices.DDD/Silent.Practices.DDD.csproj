@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/JustMeGaaRa/Silent.Practices</PackageProjectUrl>
+    <Copyright>Pavlo Hodysh (c) 2017</Copyright>
+    <Authors>JustMeGaaRa</Authors>
+    <Company>Silent</Company>
+    <PackageTags>patterns;practices;domain-driven;domain;aggregate;aggregate-root</PackageTags>
+    <Version>0.1.0-alpha</Version>
+    <RepositoryUrl>https://github.com/JustMeGaaRa/Silent.Practices</RepositoryUrl>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Description>Library dedicated to those who write boilerplate code just o implement another pattern or practice.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
+    <ProjectReference Include="..\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj" />
+  </ItemGroup>
+
+</Project>

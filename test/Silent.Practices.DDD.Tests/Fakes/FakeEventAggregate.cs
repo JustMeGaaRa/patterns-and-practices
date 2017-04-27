@@ -1,6 +1,6 @@
-namespace Silent.Practices.EventStore.Tests.Fakes
+namespace Silent.Practices.DDD.Tests.Fakes
 {
-    internal sealed class FakeEventAggregate : EventAggregate<uint>
+    internal sealed class FakeEventAggregate : EventAggregate<uint, Event>
     {
         public FakeEventAggregate()
         {

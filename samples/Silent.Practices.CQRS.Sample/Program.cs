@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Silent.Practices.CQRS.Commands;
+using Silent.Practices.DDD;
 using Silent.Practices.EventStore;
 using Silent.Practices.Messaging;
 using Silent.Practices.Persistance;
@@ -12,7 +13,8 @@ namespace Silent.Practices.CQRS.Sample
         private static void Main()
         {
             // units of work
-            IEventStore eventStore = new MemoryEventStore();
+            IComparer<Event<uint>> comparer = CreateEventComparer();
+            IEventStore<uint, Event<uint>> eventStore = new MemoryEventStore<uint, Event<uint>>(comparer);
             IUnitOfWork aggregatesUnitOfWork = new AggregateUnitOfWorkFactory().Create(eventStore);
             IUnitOfWork domainUnitOfWork = new DomainUnitOfWorkFactory().Create();
 
@@ -49,6 +51,24 @@ namespace Silent.Practices.CQRS.Sample
             Console.ReadKey();
         }
 
+        private static IComparer<Event<uint>> CreateEventComparer()
+        {
+            return Comparer<IEvent>.Create(CompareEvents);
+        }
+
+        private static int CompareEvents(IEvent left, IEvent right)
+        {
+            if (left.Timestamp > right.Timestamp)
+            {
+                return -1;
+            }
+            if (left.Timestamp < right.Timestamp)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
         #region Units Of Work
 
         public class AggregateUnitOfWorkFactory : IUnitOfWorkFactory
@@ -60,7 +80,7 @@ namespace Silent.Practices.CQRS.Sample
                     throw new ArgumentNullException(nameof(parameters));
                 }
 
-                IEventStore eventStore = parameters[0] as IEventStore;
+                IEventStore<uint, Event<uint>> eventStore = parameters[0] as IEventStore<uint, Event<uint>>;
 
                 MemoryUnitOfWork memoryUnitOfWork = new MemoryUnitOfWork();
                 memoryUnitOfWork.UseRepository(new MemoryEventAggregateRepository<OrderAggregate>(eventStore));
@@ -151,7 +171,7 @@ namespace Silent.Practices.CQRS.Sample
 
         #region Event Aggregates
 
-        public class OrderAggregate : EventAggregate<uint>
+        public class OrderAggregate : EventAggregate<uint, Event<uint>>
         {
             public OrderAggregate()
             {
@@ -173,7 +193,7 @@ namespace Silent.Practices.CQRS.Sample
             }
         }
 
-        public class OrderItemAggregate : EventAggregate<uint>
+        public class OrderItemAggregate : EventAggregate<uint, Event<uint>>
         {
             public void ChangePrice(double price)
             {
@@ -185,14 +205,14 @@ namespace Silent.Practices.CQRS.Sample
 
         #region Events
 
-        public class OrderCreatedEvent : Event
+        public class OrderCreatedEvent : Event<uint>
         {
             public OrderCreatedEvent(uint id) : base(id)
             {
             }
         }
 
-        public class OrderDateChangedEvent : Event
+        public class OrderDateChangedEvent : Event<uint>
         {
             public OrderDateChangedEvent(uint id, DateTime date) : base(id)
             {
@@ -202,24 +222,24 @@ namespace Silent.Practices.CQRS.Sample
             public DateTime Date { get; set; }
         }
 
-        public class OrderDeletedEvent : Event
+        public class OrderDeletedEvent : Event<uint>
         {
             public OrderDeletedEvent(uint id) : base(id)
             {
             }
         }
 
-        public class OrderItemAddedToOrderEvent : Event
+        public class OrderItemAddedToOrderEvent : Event<uint>
         {
 
         }
 
-        public class OrderItemRemovedFromOrderEvent : Event
+        public class OrderItemRemovedFromOrderEvent : Event<uint>
         {
 
         }
 
-        public class OrderItemPriceChangedEvent : Event
+        public class OrderItemPriceChangedEvent : Event<uint>
         {
             public OrderItemPriceChangedEvent(double price)
             {

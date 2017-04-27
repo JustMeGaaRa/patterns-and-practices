@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Silent.Practices.EventStore.Tests.Fakes;
+using Silent.Practices.DDD.Tests.Fakes;
 using Xunit;
 
-namespace Silent.Practices.EventStore.Tests
+namespace Silent.Practices.DDD.Tests
 {
     public class EventAggregateTest
     {
@@ -11,7 +11,7 @@ namespace Silent.Practices.EventStore.Tests
         public void GetUncommitted_OnEmptyAggregate_ShouldReturnEmptyCollection()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate();
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
 
             // Act
             IEnumerable<Event> result = eventAggregate.GetUncommitted();
@@ -25,7 +25,7 @@ namespace Silent.Practices.EventStore.Tests
         public void GetUncommitted_OnCreatedAggregate_ShouldReturnCollection()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1);
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate(1);
 
             // Act
             IEnumerable<Event> result = eventAggregate.GetUncommitted();
@@ -39,7 +39,7 @@ namespace Silent.Practices.EventStore.Tests
         public void MarkAsCommitted_OnEmptyAggregate_ShouldNotContainUncommitted()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate();
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
 
             // Act
             eventAggregate.MarkAsCommitted();
@@ -53,7 +53,7 @@ namespace Silent.Practices.EventStore.Tests
         public void MarkAsCommitted_OnCreatedAggregate_ShouldNotContainUncommitted()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate(1);
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate(1);
 
             // Act
             eventAggregate.MarkAsCommitted();
@@ -67,7 +67,7 @@ namespace Silent.Practices.EventStore.Tests
         public void ApplyHistory_NullCollection_ShouldThrowException()
         {
             // Arrange
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate();
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
 
             // Act, Assert
             Assert.Throws<ArgumentNullException>(() => eventAggregate.ApplyHistory(null));
@@ -80,7 +80,7 @@ namespace Silent.Practices.EventStore.Tests
             uint eventAggregateId = 1;
             Event createdEvent = new FakeCreatedEvent(eventAggregateId);
             IEnumerable<Event> historyEvents = new [] { createdEvent };
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate();
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
 
             // Act
             uint beforeChangesId = eventAggregate.Id;
@@ -96,7 +96,7 @@ namespace Silent.Practices.EventStore.Tests
         {
             // Arrange
             IEnumerable<Event> historyEvents = new Event[] { null };
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate();
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
 
             // Act, Assert
             Assert.Throws<ArgumentNullException>(() => eventAggregate.ApplyHistory(historyEvents));
@@ -108,7 +108,7 @@ namespace Silent.Practices.EventStore.Tests
             // Arrange
             Event deletedEvent = new FakeDeletedEvent(1);
             IEnumerable<Event> historyEvents = new[] { deletedEvent };
-            EventAggregate<uint> eventAggregate = new FakeEventAggregate();
+            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
 
             // Act, Assert
             Assert.Throws<NotSupportedException>(() => eventAggregate.ApplyHistory(historyEvents));

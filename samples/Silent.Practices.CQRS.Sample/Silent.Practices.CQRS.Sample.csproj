@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj" />
+    <ProjectReference Include="..\..\src\Silent.Practices.DDD\Silent.Practices.DDD.csproj" />
     <ProjectReference Include="..\..\src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
     <ProjectReference Include="..\..\src\Silent.Practices.Messaging\Silent.Practices.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj" />

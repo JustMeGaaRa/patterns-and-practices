@@ -8,72 +8,52 @@ namespace Silent.Practices.EventStore.Sample
     {
         private static void Main()
         {
-            IEventStore eventStore = new MemoryEventStore();
-
-            IEventAggregateRepository<OrderAggregate> orderAggregateRepository =
-                new MemoryEventAggregateRepository<OrderAggregate>(eventStore);
-            IEventAggregateRepository<OrderItemAggregate> orderitemAggregateRepository =
-                new MemoryEventAggregateRepository<OrderItemAggregate>(eventStore);
-
-            IRepository<OrderDto> orderRepository = new MemoryRepository<OrderDto>();
-            IRepository<OrderItemDto> orderItemRepository = new MemoryRepository<OrderItemDto>();
+            IComparer<Event<uint>> comparer = CreateEventComparer();
+            IEventStore<uint, Event<uint>> eventStore = new MemoryEventStore<uint, Event<uint>>(comparer);
 
             for (uint i = 0; i < 10; i++)
             {
-                OrderAggregate orderAggregate = new OrderAggregate(i);
-                orderAggregate.ChangeDate(DateTime.Now.AddDays(1));
-                orderAggregate.Delete();
-                orderAggregateRepository.Add(orderAggregate);
+                List<Event<uint>> events = new List<Event<uint>>();
+                events.Add(new OrderCreatedEvent(i));
+                events.Add(new OrderDateChangedEvent(i, DateTime.Now.AddDays(i)));
+                events.Add(new OrderDeletedEvent(i));
+                eventStore.SaveEvents(i, events);
             }
 
-            OrderDto found = orderRepository.GetById(1);
+            IReadOnlyCollection<Event<uint>> found = eventStore.GetEventsById(1);
 
-            Console.WriteLine($"{nameof(OrderDto.Id)}: {found.Id}");
-            Console.WriteLine($"{nameof(OrderDto.Date)}: {found.Date}");
+            Console.WriteLine($"Found events: {found.Count}");
             Console.ReadKey();
         }
 
-        #region Event Aggregates
-
-        public class OrderAggregate : EventAggregate<uint>
+        private static IComparer<Event<uint>> CreateEventComparer()
         {
-            public OrderAggregate()
-            {
-            }
-
-            public OrderAggregate(uint id) : this()
-            {
-                ApplyEvent(new OrderCreatedEvent(id));
-            }
-
-            public void ChangeDate(DateTime dateTime)
-            {
-                ApplyEvent(new OrderDateChangedEvent(Id, dateTime));
-            }
-
-            public void Delete()
-            {
-                ApplyEvent(new OrderDeletedEvent(Id));
-            }
+            return Comparer<IEvent>.Create(CompareEvents);
         }
 
-        public class OrderItemAggregate : EventAggregate<uint>
+        private static int CompareEvents(IEvent left, IEvent right)
         {
-            
+            if (left.Timestamp > right.Timestamp)
+            {
+                return -1;
+            }
+            if (left.Timestamp < right.Timestamp)
+            {
+                return 1;
+            }
+            return 0;
         }
-
-        #endregion
 
         #region Events
 
-        public class OrderCreatedEvent : Event
+        public class OrderCreatedEvent : Event<uint>
         {
             public OrderCreatedEvent(uint id) : base(id)
             {
             }
         }
 
-        public class OrderDateChangedEvent : Event
+        public class OrderDateChangedEvent : Event<uint>
         {
             public OrderDateChangedEvent(uint id, DateTime date) : base(id)
             {
@@ -83,7 +63,7 @@ namespace Silent.Practices.EventStore.Sample
             public DateTime Date { get; set; }
         }
 
-        public class OrderDeletedEvent : Event
+        public class OrderDeletedEvent : Event<uint>
         {
             public OrderDeletedEvent(uint id) : base(id)
             {

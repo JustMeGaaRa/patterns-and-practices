@@ -1,4 +1,4 @@
-﻿namespace Silent.Practices.EventStore.Tests.Fakes
+﻿namespace Silent.Practices.DDD.Tests.Fakes
 {
     internal sealed class FakeCreatedEvent : Event
     {

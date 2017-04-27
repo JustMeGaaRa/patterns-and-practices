@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Silent.Practices.EventStore
 {
-    public interface IEventStore
+    public interface IEventStore<in TKey, TEvent>
     {
-        IReadOnlyCollection<Event> GetEventsById(uint eventAggregateId);
+        IReadOnlyCollection<TEvent> GetEventsById(TKey eventAggregateId);
 
-        IReadOnlyCollection<Event> GetEvents(Func<Event, bool> filter = null);
+        IReadOnlyCollection<TEvent> GetEvents(Func<TEvent, bool> filter = null);
 
-        bool SaveEvents(uint eventAggregateId, IReadOnlyCollection<Event> unsavedChanges);
+        bool SaveEvents(TKey eventAggregateId, IReadOnlyCollection<TEvent> unsavedChanges);
     }
 }

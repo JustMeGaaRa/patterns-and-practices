@@ -2,20 +2,20 @@
 
 namespace Silent.Practices.EventStore
 {
-    public abstract class Event
+    public abstract class Event<TKey> : IEvent
     {
         protected Event()
         {
             Timestamp = DateTime.UtcNow;
         }
 
-        protected Event(uint entityId)
+        protected Event(TKey entityId)
         {
             EntityId = entityId;
             Timestamp = DateTime.UtcNow;
         }
 
-        public uint EntityId { get; }
+        public TKey EntityId { get; set; }
 
         public DateTime Timestamp { get; }
     }

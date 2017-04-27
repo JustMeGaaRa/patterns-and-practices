@@ -4,33 +4,39 @@ using System.Linq;
 
 namespace Silent.Practices.EventStore
 {
-    public class MemoryEventStore : IEventStore
+    public class MemoryEventStore<TKey, TEvent> : IEventStore<TKey, TEvent>
     {
-        private readonly Dictionary<uint, List<Event>> _events = new Dictionary<uint, List<Event>>();
+        private readonly IComparer<TEvent> _comparer;
+        private readonly Dictionary<TKey, List<TEvent>> _events = new Dictionary<TKey, List<TEvent>>();
 
-        public IReadOnlyCollection<Event> GetEventsById(uint eventAggregateId)
+        public MemoryEventStore(IComparer<TEvent> comparer)
         {
-            IReadOnlyCollection<Event> events = _events.ContainsKey(eventAggregateId)
-                ? _events[eventAggregateId].OrderBy(x => x.Timestamp).ToList()
-                : new List<Event>();
+            _comparer = comparer;
+        }
+
+        public IReadOnlyCollection<TEvent> GetEventsById(TKey eventAggregateId)
+        {
+            IReadOnlyCollection<TEvent> events = _events.ContainsKey(eventAggregateId)
+                ? _events[eventAggregateId].OrderBy(x => x, _comparer).ToList()
+                : new List<TEvent>();
 
             return events;
         }
 
-        public IReadOnlyCollection<Event> GetEvents(Func<Event, bool> filter = null)
+        public IReadOnlyCollection<TEvent> GetEvents(Func<TEvent, bool> filter = null)
         {
-            IReadOnlyCollection<Event> events = filter != null
-                ? _events.Values.SelectMany(x => x).Where(filter).OrderBy(x => x.Timestamp).ToList()
-                : new List<Event>();
+            IReadOnlyCollection<TEvent> events = filter != null
+                ? _events.Values.SelectMany(x => x).Where(filter).OrderBy(x => x, _comparer).ToList()
+                : new List<TEvent>();
 
             return events;
         }
 
-        public bool SaveEvents(uint eventAggregateId, IReadOnlyCollection<Event> unsavedChanges)
+        public bool SaveEvents(TKey eventAggregateId, IReadOnlyCollection<TEvent> unsavedChanges)
         {
             if (!_events.ContainsKey(eventAggregateId))
             {
-                _events.Add(eventAggregateId, new List<Event>());
+                _events.Add(eventAggregateId, new List<TEvent>());
             }
 
             _events[eventAggregateId].AddRange(unsavedChanges);
