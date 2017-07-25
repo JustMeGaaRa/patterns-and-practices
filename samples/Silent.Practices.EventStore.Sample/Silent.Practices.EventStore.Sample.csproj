@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
+    <PackageReference Include="Silent.Practices.EventStore" Version="0.1.0-alpha" />
   </ItemGroup>
 
 </Project>

@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj" />
-    <ProjectReference Include="..\..\src\Silent.Practices.DDD\Silent.Practices.DDD.csproj" />
-    <ProjectReference Include="..\..\src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
-    <ProjectReference Include="..\..\src\Silent.Practices.Messaging\Silent.Practices.Messaging.csproj" />
-    <ProjectReference Include="..\..\src\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj" />
+    <PackageReference Include="Silent.Practices.CQRS" Version="0.1.0-alpha" />
+    <PackageReference Include="Silent.Practices.DDD" Version="0.1.0-alpha" />
+    <PackageReference Include="Silent.Practices.EventStore" Version="0.1.0-alpha" />
+    <PackageReference Include="Silent.Practices.Messaging" Version="0.1.0-alpha" />
+    <PackageReference Include="Silent.Practices.Persistance" Version="0.1.0-alpha" />
   </ItemGroup>
 
 </Project>

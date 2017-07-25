@@ -1,43 +1,41 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26720.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.EventStore", "src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj", "{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.EventStore", "src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj", "{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Messaging", "src\Silent.Practices.Messaging\Silent.Practices.Messaging.csproj", "{6F9329CD-BA5A-4759-8977-9EFF024D24B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Messaging", "src\Silent.Practices.Messaging\Silent.Practices.Messaging.csproj", "{6F9329CD-BA5A-4759-8977-9EFF024D24B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Persistance", "src\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj", "{1A7267B3-9DC4-4962-9A30-6675785F5088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Persistance", "src\Silent.Practices.Persistance\Silent.Practices.Persistance.csproj", "{1A7267B3-9DC4-4962-9A30-6675785F5088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Persistance.Tests", "test\Silent.Practices.Persistance.Tests\Silent.Practices.Persistance.Tests.csproj", "{9F04273F-3D82-495F-8C57-CFA18718795A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Persistance.Tests", "test\Silent.Practices.Persistance.Tests\Silent.Practices.Persistance.Tests.csproj", "{9F04273F-3D82-495F-8C57-CFA18718795A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Patterns", "src\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj", "{4AD13614-CCA0-4ACC-9E87-00E381D4E2EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Patterns", "src\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj", "{4AD13614-CCA0-4ACC-9E87-00E381D4E2EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.EventStore.Tests", "test\Silent.Practices.EventStore.Tests\Silent.Practices.EventStore.Tests.csproj", "{4BC6D1F5-9EAF-4055-80D4-1CFAFD9548C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.EventStore.Tests", "test\Silent.Practices.EventStore.Tests\Silent.Practices.EventStore.Tests.csproj", "{4BC6D1F5-9EAF-4055-80D4-1CFAFD9548C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Extensions", "src\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj", "{498AD90E-0EC6-4F70-86CA-EFC5A2905A94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Extensions", "src\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj", "{498AD90E-0EC6-4F70-86CA-EFC5A2905A94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Extensions.Tests", "test\Silent.Practices.Extensions.Tests\Silent.Practices.Extensions.Tests.csproj", "{48CD8A67-1DFA-4097-80F4-F7CA06F46053}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Extensions.Tests", "test\Silent.Practices.Extensions.Tests\Silent.Practices.Extensions.Tests.csproj", "{48CD8A67-1DFA-4097-80F4-F7CA06F46053}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.Messaging.Tests", "test\Silent.Practices.Messaging.Tests\Silent.Practices.Messaging.Tests.csproj", "{1C17F5D5-2968-4488-9245-4A04B247DAA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.Messaging.Tests", "test\Silent.Practices.Messaging.Tests\Silent.Practices.Messaging.Tests.csproj", "{1C17F5D5-2968-4488-9245-4A04B247DAA0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C2117FAC-7A59-4C94-9C0B-91B92D9DB36B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.CQRS.Tests", "test\Silent.Practices.CQRS.Tests\Silent.Practices.CQRS.Tests.csproj", "{80FE1886-EF64-46FF-9630-E10798E22BCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.CQRS.Tests", "test\Silent.Practices.CQRS.Tests\Silent.Practices.CQRS.Tests.csproj", "{80FE1886-EF64-46FF-9630-E10798E22BCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.CQRS", "src\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj", "{77017A02-E505-4903-BDC7-27DD09FA4E40}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{41525F02-57A7-4094-A932-C49F54628F73}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.EventStore.Sample", "samples\Silent.Practices.EventStore.Sample\Silent.Practices.EventStore.Sample.csproj", "{92E89525-48BF-44B9-8915-4A5AB83DED18}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.CQRS.Sample", "samples\Silent.Practices.CQRS.Sample\Silent.Practices.CQRS.Sample.csproj", "{CD902F33-D07A-455B-98CA-859B67C679F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.CQRS", "src\Silent.Practices.CQRS\Silent.Practices.CQRS.csproj", "{77017A02-E505-4903-BDC7-27DD09FA4E40}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{26446D12-212D-4301-9A32-CA709F7FD8FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.DDD", "src\Silent.Practices.DDD\Silent.Practices.DDD.csproj", "{0D68B33D-F6D8-4F1B-AD7B-CC1740F80B38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.DDD", "src\Silent.Practices.DDD\Silent.Practices.DDD.csproj", "{0D68B33D-F6D8-4F1B-AD7B-CC1740F80B38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.DDD.Tests", "test\Silent.Practices.DDD.Tests\Silent.Practices.DDD.Tests.csproj", "{479360B5-7FFD-41F7-9100-F5676D01FF8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.DDD.Tests", "test\Silent.Practices.DDD.Tests\Silent.Practices.DDD.Tests.csproj", "{479360B5-7FFD-41F7-9100-F5676D01FF8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.MetadataProvider", "src\Silent.Practices.MetadataProvider\Silent.Practices.MetadataProvider.csproj", "{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.MetadataProvider.Tests", "test\Silent.Practices.MetadataProvider.Tests\Silent.Practices.MetadataProvider.Tests.csproj", "{2134005D-6119-4B52-9AEA-236547B8F2B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,14 +87,6 @@ Global
 		{77017A02-E505-4903-BDC7-27DD09FA4E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77017A02-E505-4903-BDC7-27DD09FA4E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77017A02-E505-4903-BDC7-27DD09FA4E40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92E89525-48BF-44B9-8915-4A5AB83DED18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92E89525-48BF-44B9-8915-4A5AB83DED18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92E89525-48BF-44B9-8915-4A5AB83DED18}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92E89525-48BF-44B9-8915-4A5AB83DED18}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD902F33-D07A-455B-98CA-859B67C679F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD902F33-D07A-455B-98CA-859B67C679F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD902F33-D07A-455B-98CA-859B67C679F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD902F33-D07A-455B-98CA-859B67C679F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D68B33D-F6D8-4F1B-AD7B-CC1740F80B38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D68B33D-F6D8-4F1B-AD7B-CC1740F80B38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D68B33D-F6D8-4F1B-AD7B-CC1740F80B38}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -105,6 +95,14 @@ Global
 		{479360B5-7FFD-41F7-9100-F5676D01FF8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{479360B5-7FFD-41F7-9100-F5676D01FF8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{479360B5-7FFD-41F7-9100-F5676D01FF8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2134005D-6119-4B52-9AEA-236547B8F2B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2134005D-6119-4B52-9AEA-236547B8F2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2134005D-6119-4B52-9AEA-236547B8F2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2134005D-6119-4B52-9AEA-236547B8F2B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,9 +119,12 @@ Global
 		{1C17F5D5-2968-4488-9245-4A04B247DAA0} = {C2117FAC-7A59-4C94-9C0B-91B92D9DB36B}
 		{80FE1886-EF64-46FF-9630-E10798E22BCE} = {C2117FAC-7A59-4C94-9C0B-91B92D9DB36B}
 		{77017A02-E505-4903-BDC7-27DD09FA4E40} = {26446D12-212D-4301-9A32-CA709F7FD8FE}
-		{92E89525-48BF-44B9-8915-4A5AB83DED18} = {41525F02-57A7-4094-A932-C49F54628F73}
-		{CD902F33-D07A-455B-98CA-859B67C679F8} = {41525F02-57A7-4094-A932-C49F54628F73}
 		{0D68B33D-F6D8-4F1B-AD7B-CC1740F80B38} = {26446D12-212D-4301-9A32-CA709F7FD8FE}
 		{479360B5-7FFD-41F7-9100-F5676D01FF8D} = {C2117FAC-7A59-4C94-9C0B-91B92D9DB36B}
+		{922F00BF-5866-4E9F-9EE4-6BE1E10C659A} = {26446D12-212D-4301-9A32-CA709F7FD8FE}
+		{2134005D-6119-4B52-9AEA-236547B8F2B6} = {C2117FAC-7A59-4C94-9C0B-91B92D9DB36B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53CFED4B-B052-40DB-A36A-B48CEF42A4FE}
 	EndGlobalSection
 EndGlobal

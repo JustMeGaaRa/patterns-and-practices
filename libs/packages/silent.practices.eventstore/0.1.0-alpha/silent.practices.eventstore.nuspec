@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Silent.Practices.EventStore</id>
+    <version>0.1.0-alpha</version>
+    <authors>JustMeGaaRa</authors>
+    <owners>JustMeGaaRa</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/JustMeGaaRa/Silent.Practices</projectUrl>
+    <description>Library dedicated to those who write boilerplate code just o implement another pattern or practice.</description>
+    <copyright>Pavlo Hodysh (c) 2017</copyright>
+    <tags>patterns practices event-store events eventing event-log</tags>
+    <repository url="https://github.com/JustMeGaaRa/Silent.Practices" />
+    <dependencies>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="Silent.Practices.Patterns" version="0.1.0-alpha" exclude="Build,Analyzers" />
+        <dependency id="Silent.Practices.Persistance" version="0.1.0-alpha" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
