@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.CQRS.Sampl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.MetadataProvider.Sample", "samples\Silent.Practices.MetadataProvider.Sample\Silent.Practices.MetadataProvider.Sample.csproj", "{22D0BD77-1F18-4ABD-AD00-A47A7B6E66D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.MetadataProvider", "src\Silent.Practices.MetadataProvider\Silent.Practices.MetadataProvider.csproj", "{2BA13D27-A17F-4AB8-9A95-4ED5CFD19FE2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,10 +29,6 @@ Global
 		{22D0BD77-1F18-4ABD-AD00-A47A7B6E66D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22D0BD77-1F18-4ABD-AD00-A47A7B6E66D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22D0BD77-1F18-4ABD-AD00-A47A7B6E66D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BA13D27-A17F-4AB8-9A95-4ED5CFD19FE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BA13D27-A17F-4AB8-9A95-4ED5CFD19FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BA13D27-A17F-4AB8-9A95-4ED5CFD19FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BA13D27-A17F-4AB8-9A95-4ED5CFD19FE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,7 +37,6 @@ Global
 		{92E89525-48BF-44B9-8915-4A5AB83DED18} = {41525F02-57A7-4094-A932-C49F54628F73}
 		{CD902F33-D07A-455B-98CA-859B67C679F8} = {41525F02-57A7-4094-A932-C49F54628F73}
 		{22D0BD77-1F18-4ABD-AD00-A47A7B6E66D5} = {41525F02-57A7-4094-A932-C49F54628F73}
-		{2BA13D27-A17F-4AB8-9A95-4ED5CFD19FE2} = {41525F02-57A7-4094-A932-C49F54628F73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A710D46-436A-43B7-BB86-96B82DAA9A5A}
