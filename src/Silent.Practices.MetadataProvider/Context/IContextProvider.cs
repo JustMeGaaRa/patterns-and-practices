@@ -1,6 +1,6 @@
 namespace Silent.Practices.MetadataProvider.Context
 {
-    public interface IContext<T>
+    public interface IContextProvider<T>
     {
         T GetContext();
     }

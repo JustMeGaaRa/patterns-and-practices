@@ -14,9 +14,6 @@ namespace Silent.Practices.MetadataProvider
 
         public ICollection<MemberMetadata> Properties { get; }
 
-        public override string ToString()
-        {
-            return TypeName;
-        }
+        public override string ToString() => TypeName;
     }
 }

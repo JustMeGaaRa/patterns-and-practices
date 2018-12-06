@@ -18,9 +18,6 @@
 
         public bool IsEditable { get; }
 
-        public override string ToString()
-        {
-            return $"{MemberType} {MemberName}";
-        }
+        public override string ToString() => $"{MemberName} ({MemberType})";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Silent.Practices.MetadataProvider.Builders;
+using Silent.Practices.MetadataProvider.Extensions;
 using Xunit;
 
 namespace Silent.Practices.MetadataProvider.Tests
@@ -37,8 +38,8 @@ namespace Silent.Practices.MetadataProvider.Tests
 
             // Act
             builder.Entity<FakeEntity>()
-                   .HasRequired(x => x.Name)
-                   .HasNonEditable(x => x.Name);
+                .HasRequired(x => x.Name)
+                .HasNonEditable(x => x.Name);
 
             TypeMetadata metadata = provider.GetMetadata(typeof(FakeEntity));
 

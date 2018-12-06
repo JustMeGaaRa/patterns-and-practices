@@ -10,7 +10,7 @@ namespace Silent.Practices.MetadataProvider.Context
             Properties = new MemberContextSet(source.GetProperties());
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
         public MemberContextSet Properties { get; }
     }

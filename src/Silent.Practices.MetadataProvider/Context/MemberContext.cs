@@ -11,7 +11,7 @@ namespace Silent.Practices.MetadataProvider.Context
             IsEditable = true;
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
         public bool IsRequired { get; set; }
 

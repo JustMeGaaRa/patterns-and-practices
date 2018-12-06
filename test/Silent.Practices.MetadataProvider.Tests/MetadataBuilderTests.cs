@@ -1,8 +1,7 @@
-using System;
-using System.Linq.Expressions;
 using System.Reflection;
 using Silent.Practices.MetadataProvider.Builders;
 using Silent.Practices.MetadataProvider.Context;
+using Silent.Practices.MetadataProvider.Extensions;
 using Xunit;
 
 namespace Silent.Practices.MetadataProvider.Tests
@@ -27,12 +26,11 @@ namespace Silent.Practices.MetadataProvider.Tests
         {
             // Arrange
             IMetadataBuilder builder = new MetadataBuilder();
-            Expression<Func<FakeEntity, string>> propertyExpression = p => p.Name;
 
             // Act
             ITypeMetadataBuilder<FakeEntity> entityBuilder =
                 builder.Entity<FakeEntity>()
-                       .HasRequired(propertyExpression);
+                    .HasRequired(p => p.Name);
 
             // Assert
             Assert.NotNull(entityBuilder);
@@ -43,12 +41,11 @@ namespace Silent.Practices.MetadataProvider.Tests
         {
             // Arrange
             IMetadataBuilder builder = new MetadataBuilder();
-            Expression<Func<FakeEntity, string>> propertyExpression = p => p.Name;
 
             // Act
             ITypeMetadataBuilder<FakeEntity> entityBuilder =
                 builder.Entity<FakeEntity>()
-                       .HasNonEditable(propertyExpression);
+                    .HasNonEditable(p => p.Name);
 
             // Assert
             Assert.NotNull(entityBuilder);
@@ -59,12 +56,11 @@ namespace Silent.Practices.MetadataProvider.Tests
         {
             // Arrange
             IMetadataBuilder builder = new MetadataBuilder();
-            Expression<Func<FakeEntity, string>> propertyExpression = p => p.Name;
 
             // Act
             IMemberMetadataBuilder entityBuilder =
                 builder.Entity<FakeEntity>()
-                       .Property(propertyExpression);
+                    .Property(p => p.Name);
 
             // Assert
             Assert.NotNull(entityBuilder);
@@ -75,12 +71,14 @@ namespace Silent.Practices.MetadataProvider.Tests
         {
             // Arrange
             TypeContext context = new TypeContext(typeof(FakeEntity).GetTypeInfo());
-            ITypeMetadataBuilder<FakeEntity> builder = new TypeMetadataBuilder<FakeEntity>(context);
+            ITypeMetadataBuilder<FakeEntity> builder =
+                new TypeMetadataBuilderWrapper<FakeEntity>(
+                    new TypeMetadataBuilder(context));
 
             // Act
             IMemberMetadataBuilder entityBuilder =
                 builder.Property(p => p.Name)
-                       .IsRequired();
+                    .IsRequired();
 
             // Assert
             Assert.NotNull(entityBuilder);
@@ -91,12 +89,14 @@ namespace Silent.Practices.MetadataProvider.Tests
         {
             // Arrange
             TypeContext context = new TypeContext(typeof(FakeEntity).GetTypeInfo());
-            ITypeMetadataBuilder<FakeEntity> builder = new TypeMetadataBuilder<FakeEntity>(context);
+            ITypeMetadataBuilder<FakeEntity> builder =
+                new TypeMetadataBuilderWrapper<FakeEntity>(
+                    new TypeMetadataBuilder(context));
 
             // Act
             IMemberMetadataBuilder entityBuilder =
                 builder.Property(p => p.Name)
-                       .NonEditable();
+                    .NonEditable();
 
             // Assert
             Assert.NotNull(entityBuilder);

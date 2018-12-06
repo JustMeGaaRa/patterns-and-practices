@@ -16,12 +16,6 @@ namespace Silent.Practices.MetadataProvider.Builders
             return new TypeMetadataBuilder(context);
         }
 
-        public ITypeMetadataBuilder<T> Entity<T>()
-        {
-            var context = GetTypeContext(typeof(T));
-            return new TypeMetadataBuilder<T>(context);
-        }
-
         private TypeContext GetTypeContext(Type type)
         {
             if (!_typeContexts.ContainsKey(type.FullName))

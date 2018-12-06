@@ -23,9 +23,6 @@ namespace Silent.Practices.MetadataProvider.Builders
             return this;
         }
 
-        public MemberContext GetContext()
-        {
-            return _context;
-        }
+        public MemberContext GetContext() => _context;
     }
 }
