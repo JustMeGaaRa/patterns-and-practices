@@ -14,7 +14,8 @@ namespace Silent.Practices.MetadataProvider.Tests
         public void Property_OnPersonEntity_ShouldReturnMemberBuilder()
         {
             // Arrange
-            IMetadataBuilder builder = new MetadataBuilder();
+            TypeCache typeCache = new TypeCache();
+            IMetadataBuilder builder = new MetadataBuilder(typeCache);
 
             // Act
             IMemberMetadataBuilder entityBuilder =

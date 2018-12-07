@@ -8,13 +8,13 @@ namespace Silent.Practices.MetadataProvider.Context
         {
             Name = source.Name;
             Type = source;
-            Properties = new MemberContextSet(source.GetProperties());
+            Members = new MemberContextSet(source.GetProperties());
         }
 
         public string Name { get; }
 
         public TypeInfo Type { get; }
 
-        public MemberContextSet Properties { get; }
+        public MemberContextSet Members { get; }
     }
 }

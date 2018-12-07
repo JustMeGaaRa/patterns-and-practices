@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Silent.Practices.MetadataProvider
 {
-    public class TypeCache
+    public class TypeCache : IEnumerable<TypeMetadata>
     {
         private readonly Dictionary<string, TypeMetadata> _typeContexts = new Dictionary<string, TypeMetadata>();
 
@@ -10,6 +11,10 @@ namespace Silent.Practices.MetadataProvider
 
         public TypeMetadata SetType(TypeMetadata type) => _typeContexts[type.TypeName] = type;
 
-        public TypeMetadata GetType(string typeName) => _typeContexts[typeName];
+        public TypeMetadata GetType(string typeName) => _typeContexts.ContainsKey(typeName) ? _typeContexts[typeName] : null;
+
+        public IEnumerator<TypeMetadata> GetEnumerator() => _typeContexts.Values.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

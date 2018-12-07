@@ -26,7 +26,7 @@ namespace Silent.Practices.MetadataProvider.Builders
                 ? new List<MemberMetadata>()
                 : type.GetTypeInfo()
                     .GetProperties()
-                    .Select(x => new MemberMetadata(x.Name, null))
+                    .Select(x => new MemberMetadata(x.Name, _typeCache.GetType(x.PropertyType.Name)))
                     .ToList();
 
             return new TypeMetadata(type.Name, membersMetadata);
@@ -34,7 +34,7 @@ namespace Silent.Practices.MetadataProvider.Builders
 
         public IMemberMetadataBuilder Property(string propertyName)
         {
-            var propertyContext = _context.Properties.GetProperty(propertyName);
+            var propertyContext = _context.Members.GetProperty(propertyName);
             return new MemberMetadataBuilder(propertyContext, _typeCache);
         }
     }

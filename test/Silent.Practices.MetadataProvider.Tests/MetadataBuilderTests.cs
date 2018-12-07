@@ -10,7 +10,8 @@ namespace Silent.Practices.MetadataProvider.Tests
         public void Entity_OnPersonType_ShouldReturnTypeBuilder()
         {
             // Arrange
-            IMetadataBuilder builder = new MetadataBuilder();
+            TypeCache typeCache = new TypeCache();
+            IMetadataBuilder builder = new MetadataBuilder(typeCache);
 
             // Act
             ITypeMetadataBuilder<Person> entityBuilder = builder.Entity<Person>();
@@ -23,7 +24,8 @@ namespace Silent.Practices.MetadataProvider.Tests
         public void Entity_OnPersonTypeWithEntityBuilderAction_ShouldReturnMemberBuilder()
         {
             // Arrange
-            IMetadataBuilder builder = new MetadataBuilder();
+            TypeCache typeCache = new TypeCache();
+            IMetadataBuilder builder = new MetadataBuilder(typeCache);
 
             // Act
             IMetadataBuilder entityBuilder = builder
