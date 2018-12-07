@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26720.2
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28315.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.EventStore", "src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj", "{3C507D1B-0D15-4AC7-BCAA-11BFBDCE258C}"
 EndProject
@@ -33,9 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.DDD", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.DDD.Tests", "test\Silent.Practices.DDD.Tests\Silent.Practices.DDD.Tests.csproj", "{479360B5-7FFD-41F7-9100-F5676D01FF8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.MetadataProvider", "src\Silent.Practices.MetadataProvider\Silent.Practices.MetadataProvider.csproj", "{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.MetadataProvider", "src\Silent.Practices.MetadataProvider\Silent.Practices.MetadataProvider.csproj", "{922F00BF-5866-4E9F-9EE4-6BE1E10C659A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silent.Practices.MetadataProvider.Tests", "test\Silent.Practices.MetadataProvider.Tests\Silent.Practices.MetadataProvider.Tests.csproj", "{2134005D-6119-4B52-9AEA-236547B8F2B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silent.Practices.MetadataProvider.Tests", "test\Silent.Practices.MetadataProvider.Tests\Silent.Practices.MetadataProvider.Tests.csproj", "{2134005D-6119-4B52-9AEA-236547B8F2B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

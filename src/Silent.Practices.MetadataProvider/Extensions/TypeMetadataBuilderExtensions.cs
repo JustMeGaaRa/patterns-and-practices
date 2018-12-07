@@ -8,7 +8,7 @@ namespace Silent.Practices.MetadataProvider.Extensions
     public static class TypeMetadataBuilderExtensions
     {
         public static IMemberMetadataBuilder Property<TEntity>(
-            this ITypeMetadataBuilder<TEntity> typeMetadataBuilder, 
+            this ITypeMetadataBuilder<TEntity> typeMetadataBuilder,
             Expression<Func<TEntity, object>> propertyExpression)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
@@ -16,7 +16,7 @@ namespace Silent.Practices.MetadataProvider.Extensions
         }
 
         public static ITypeMetadataBuilder<TEntity> HasRequired<TEntity>(
-            this ITypeMetadataBuilder<TEntity> typeMetadataBuilder, 
+            this ITypeMetadataBuilder<TEntity> typeMetadataBuilder,
             Expression<Func<TEntity, object>> propertyExpression)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
@@ -25,7 +25,7 @@ namespace Silent.Practices.MetadataProvider.Extensions
         }
 
         public static ITypeMetadataBuilder<TEntity> HasNonEditable<TEntity>(
-            this ITypeMetadataBuilder<TEntity> typeMetadataBuilder, 
+            this ITypeMetadataBuilder<TEntity> typeMetadataBuilder,
             Expression<Func<TEntity, object>> propertyExpression)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
@@ -36,14 +36,21 @@ namespace Silent.Practices.MetadataProvider.Extensions
         private static PropertyInfo GetPropertyInfo<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertyLambda)
         {
             Type type = typeof(TEntity);
+            PropertyInfo propertyInfo = null;
 
-            MemberExpression member = propertyLambda.Body as MemberExpression;
-            if (member == null)
+            // TODO PH: replace this with recursive pattern matching
+            switch (propertyLambda.Body)
             {
-                throw new ArgumentException($"Expression '{propertyLambda}' refers to a method, not a property.");
+                case MemberExpression expression:
+                    propertyInfo = expression.Member as PropertyInfo;
+
+                    break;
+                case UnaryExpression expression:
+                    MemberExpression propertyExpression = expression.Operand as MemberExpression;
+                    propertyInfo = propertyExpression?.Member as PropertyInfo;
+                    break;
             }
 
-            PropertyInfo propertyInfo = member.Member as PropertyInfo;
             if (propertyInfo == null)
             {
                 throw new ArgumentException($"Expression '{propertyLambda}' refers to a field, not a property.");

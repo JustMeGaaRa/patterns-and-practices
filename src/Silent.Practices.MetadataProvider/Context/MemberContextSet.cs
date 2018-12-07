@@ -9,9 +9,7 @@ namespace Silent.Practices.MetadataProvider.Context
     {
         private readonly Dictionary<string, MemberContext> _memberContexts = new Dictionary<string, MemberContext>();
 
-        public MemberContextSet()
-        {
-        }
+        public MemberContextSet() { }
 
         public MemberContextSet(IEnumerable<PropertyInfo> properties) => properties.Select(AddProperty).ToList();
 

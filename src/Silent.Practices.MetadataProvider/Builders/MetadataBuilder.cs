@@ -1,29 +1,26 @@
+using Silent.Practices.MetadataProvider.Context;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Silent.Practices.MetadataProvider.Context;
 
 namespace Silent.Practices.MetadataProvider.Builders
 {
     public class MetadataBuilder : IMetadataBuilder
     {
-        // TODO PH: add a service locator for configured subtypes
-        private readonly Dictionary<string, TypeContext> _typeContexts = new Dictionary<string, TypeContext>();
+        private readonly TypeContextSet _types = new TypeContextSet();
+        private readonly TypeCache _typeCache;
+
+        public MetadataBuilder() { }
+
+        public MetadataBuilder(TypeCache typeCache) => _typeCache = typeCache;
 
         public ITypeMetadataBuilder Entity(Type type)
         {
-            var context = GetTypeContext(type);
-            return new TypeMetadataBuilder(context);
-        }
-
-        private TypeContext GetTypeContext(Type type)
-        {
-            if (!_typeContexts.ContainsKey(type.FullName))
-            {
-                _typeContexts.Add(type.FullName, new TypeContext(type.GetTypeInfo()));
-            }
-
-            return _typeContexts[type.FullName];
+            var context = _types.ContainsType(type.GetTypeInfo())
+                ? _types.GetType(type.Name) 
+                : _types.AddType(type.GetTypeInfo());
+            return new TypeMetadataBuilder(context, _typeCache);
         }
     }
 }

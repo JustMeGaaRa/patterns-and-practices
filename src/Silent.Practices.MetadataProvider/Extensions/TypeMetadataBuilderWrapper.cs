@@ -1,5 +1,4 @@
 ﻿using Silent.Practices.MetadataProvider.Context;
-using System;
 
 namespace Silent.Practices.MetadataProvider.Builders
 {
@@ -8,6 +7,8 @@ namespace Silent.Practices.MetadataProvider.Builders
         private readonly ITypeMetadataBuilder _metadataBuilder;
 
         public TypeMetadataBuilderWrapper(ITypeMetadataBuilder metadataBuilder) => _metadataBuilder = metadataBuilder;
+
+        public TypeMetadata Build() => _metadataBuilder.Build();
 
         public TypeContext GetContext() => _metadataBuilder.GetContext();
 
