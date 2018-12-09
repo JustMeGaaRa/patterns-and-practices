@@ -1,5 +1,6 @@
 using Silent.Practices.MetadataProvider.Builders;
 using Silent.Practices.MetadataProvider.Extensions;
+using System.Linq;
 using Xunit;
 
 namespace Silent.Practices.MetadataProvider.Tests
@@ -18,6 +19,25 @@ namespace Silent.Practices.MetadataProvider.Tests
 
             // Assert
             Assert.NotNull(entityBuilder);
+        }
+
+        [Fact]
+        public void Build_OnPersonType_ShouldReturnPersonAndPositionMetadata()
+        {
+            // Arrange
+            TypeCache typeCache = new TypeCache();
+            IMetadataBuilder builder = new MetadataBuilder(typeCache);
+
+            // Act
+            ITypeMetadataBuilder<Person> typeBuilder = builder.Entity<Person>();
+            Metadata metadata = builder.Build();
+
+            // Assert
+            Assert.NotNull(metadata);
+            Assert.NotNull(metadata.Types);
+            Assert.NotEmpty(metadata.Types);
+            Assert.True(metadata.Types.Any(x => x.TypeName == typeof(Person).Name));
+            Assert.True(metadata.Types.Any(x => x.TypeName == typeof(Position).Name));
         }
 
         [Fact]

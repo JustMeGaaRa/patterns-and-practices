@@ -13,8 +13,6 @@ namespace Silent.Practices.MetadataProvider.Builders
             _typeCache = typeCache;
         }
 
-        public MemberContext GetContext() => _context;
-
         public MemberMetadata Build()
         {
             TypeMetadata typeMetadata = _typeCache.GetType(_context.Name);

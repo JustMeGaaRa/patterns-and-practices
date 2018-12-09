@@ -1,4 +1,5 @@
 using Silent.Practices.MetadataProvider.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,26 +17,53 @@ namespace Silent.Practices.MetadataProvider.Builders
             _typeCache = typeCache;
         }
 
-        public TypeContext GetContext() => _context;
-
-        public TypeMetadata Build()
-        {
-            var type = _context.Type;
-
-            var membersMetadata = type.IsPrimitive || type.IsArray
-                ? new List<MemberMetadata>()
-                : type.GetTypeInfo()
-                    .GetProperties()
-                    .Select(x => new MemberMetadata(x.Name, _typeCache.GetType(x.PropertyType.Name)))
-                    .ToList();
-
-            return new TypeMetadata(type.Name, membersMetadata);
-        }
+        public TypeMetadata Build() => BuildTypeMetadata(_context.Type, _typeCache);
 
         public IMemberMetadataBuilder Property(string propertyName)
         {
             var propertyContext = _context.Members.GetProperty(propertyName);
             return new MemberMetadataBuilder(propertyContext, _typeCache);
+        }
+
+        private TypeMetadata BuildTypeMetadata(TypeInfo type, TypeCache cache)
+        {
+            if (cache.ContainsType(type.Name))
+            {
+                return cache.GetType(type.Name);
+            }
+
+            TypeMetadata typeMetadata = null;
+
+            if (type.IsPrimitive || type == typeof(string) || type == typeof(DateTime))
+            {
+                typeMetadata = new TypeMetadata(type.Name);
+            }
+            else if (type.IsArray)
+            {
+                typeMetadata = new TypeMetadata(type.Name);
+            }
+            else if (type.IsGenericType)
+            {
+                type.GenericTypeArguments.Select(parameter => BuildTypeMetadata(parameter.GetTypeInfo(), cache)).ToList();
+                typeMetadata = new TypeMetadata(type.Name, BuildMemberCollection(type, cache));
+            }
+            else
+            {
+                typeMetadata = new TypeMetadata(type.Name, BuildMemberCollection(type, cache));
+            }
+
+            return cache.SetType(typeMetadata);
+        }
+
+        private ICollection<MemberMetadata> BuildMemberCollection(TypeInfo type, TypeCache cache)
+        {
+            return type.GetProperties().Select(property => BuildMemberMetadata(property, cache)).ToList();
+        }
+
+        private MemberMetadata BuildMemberMetadata(PropertyInfo property, TypeCache cache)
+        {
+            TypeMetadata typeMetadata = BuildTypeMetadata(property.PropertyType.GetTypeInfo(), cache);
+            return new MemberMetadata(property.Name, typeMetadata);
         }
     }
 }

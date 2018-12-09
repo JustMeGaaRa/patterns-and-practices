@@ -16,7 +16,7 @@ namespace Silent.Practices.MetadataProvider.Builders
         public Metadata Build()
         {
             OnModelCreating(_metadataBuilder);
-            return new Metadata(_typeCache.ToList());
+            return _metadataBuilder.Build();
         }
 
         protected abstract void OnModelCreating(IMetadataBuilder metadataBuilder);

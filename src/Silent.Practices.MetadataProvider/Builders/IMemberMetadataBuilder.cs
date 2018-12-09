@@ -2,7 +2,7 @@ using Silent.Practices.MetadataProvider.Context;
 
 namespace Silent.Practices.MetadataProvider.Builders
 {
-    public interface IMemberMetadataBuilder : IContextProvider<MemberContext>, IBuilder<MemberMetadata>
+    public interface IMemberMetadataBuilder : IBuilder<MemberMetadata>
     {
         IMemberMetadataBuilder DisplayAs(string name);
 

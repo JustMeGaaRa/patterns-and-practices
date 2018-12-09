@@ -4,6 +4,12 @@ namespace Silent.Practices.MetadataProvider
 {
     public class TypeMetadata
     {
+        public TypeMetadata(string typeName)
+        {
+            TypeName = typeName;
+            Properties = new List<MemberMetadata>();
+        }
+
         public TypeMetadata(string typeName, ICollection<MemberMetadata> properties)
         {
             TypeName = typeName;
@@ -14,6 +20,6 @@ namespace Silent.Practices.MetadataProvider
 
         public ICollection<MemberMetadata> Properties { get; }
 
-        public override string ToString() => TypeName;
+        public override string ToString() => $"{TypeName}, Properties: {Properties?.Count}";
     }
 }

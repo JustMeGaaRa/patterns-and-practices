@@ -10,8 +10,6 @@ namespace Silent.Practices.MetadataProvider.Builders
 
         public TypeMetadata Build() => _metadataBuilder.Build();
 
-        public TypeContext GetContext() => _metadataBuilder.GetContext();
-
         public IMemberMetadataBuilder Property(string propertyName) => _metadataBuilder.Property(propertyName);
     }
 }
