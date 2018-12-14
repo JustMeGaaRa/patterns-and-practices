@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silent.Practices.DDD;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -10,8 +11,8 @@ namespace Silent.Practices.Persistance.Tests
         public void Add_NewEntity_ShouldReturnTrue()
         {
             // Arrange
-            IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
-            FakeEntity fakeEntity = new FakeEntity { Id = 1 };
+            IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
+            FakeEntity fakeEntity = new FakeEntity { EntityId = Guid.NewGuid() };
 
             // Act
             bool result = repository.Add(fakeEntity);
@@ -24,7 +25,7 @@ namespace Silent.Practices.Persistance.Tests
         public void Add_NullObject_ShouldReturnFalse()
         {
             // Arrange
-            IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
+            IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
 
             // Act
             bool result = repository.Add(null);
@@ -39,17 +40,17 @@ namespace Silent.Practices.Persistance.Tests
             // Arrange
             string oldValue = "Old Value";
             string newValue = "New Value";
-            uint entityId = 1;
+            Guid entityId = Guid.NewGuid();
 
-            IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
+            IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
             FakeEntity originalEntity = new FakeEntity
             {
-                Id = entityId,
+                EntityId = entityId,
                 Value = oldValue
             };
             FakeEntity modifiedEntity = new FakeEntity
             {
-                Id = entityId,
+                EntityId = entityId,
                 Value = newValue
             };
 
@@ -67,44 +68,44 @@ namespace Silent.Practices.Persistance.Tests
         public void GetById_OnEmptyRepository_ShouldThrowException()
         {
             // Arrange
-            IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
+            IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
 
             // Act, Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.GetById(1));
+            Assert.Throws<KeyNotFoundException>(() => repository.FindById(Guid.NewGuid()));
         }
 
         [Fact]
         public void GetById_WithUnexistingId_ShouldThrowException()
         {
             // Arrange
-            IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
-            FakeEntity fakeEntity = new FakeEntity { Id = 1 };
+            IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
+            FakeEntity fakeEntity = new FakeEntity { EntityId = Guid.NewGuid() };
 
             // Act
             repository.Add(fakeEntity);
 
             // Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.GetById(2));
+            Assert.Throws<KeyNotFoundException>(() => repository.FindById(Guid.NewGuid()));
         }
 
         [Fact]
         public void GetById_WithExistingId_ShouldReturnEntity()
         {
             // Arrange
-            uint entityId = 1;
-            IRepository<FakeEntity> repository = new MemoryRepository<FakeEntity>();
-            FakeEntity fakeEntity = new FakeEntity { Id = entityId };
+            Guid entityId = Guid.NewGuid();
+            IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
+            FakeEntity fakeEntity = new FakeEntity { EntityId = entityId };
 
             // Act
             repository.Add(fakeEntity);
-            var result = repository.GetById(entityId);
+            var result = repository.FindById(entityId);
 
             // Assert
             Assert.NotNull(result);
             Assert.Same(fakeEntity, result);
         }
 
-        private class FakeEntity : EntityBase<uint>
+        private class FakeEntity : EntityWithGuidKey
         {
             public string Value { get; set; }
         }

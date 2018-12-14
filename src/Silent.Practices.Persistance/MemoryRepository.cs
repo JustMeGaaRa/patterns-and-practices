@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Silent.Practices.DDD;
 using Silent.Practices.Extensions;
 
 namespace Silent.Practices.Persistance
 {
-    public class MemoryRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
+    public class MemoryRepository<TEntity, TKey> : 
+        IRepository<TEntity, TKey> 
+        where TEntity : Entity<TKey>
     {
         protected readonly Dictionary<TKey, TEntity> Entities = new Dictionary<TKey, TEntity>();
 
-        public virtual TEntity GetById(TKey id)
+        public virtual TEntity FindById(TKey id)
         {
             if (!Entities.ContainsKey(id))
             {
@@ -18,7 +22,7 @@ namespace Silent.Practices.Persistance
             return Entities[id];
         }
 
-        public virtual ICollection<TEntity> Get()
+        public virtual ICollection<TEntity> GetAll()
         {
             return Entities.Values.ToList();
         }
@@ -30,13 +34,13 @@ namespace Silent.Practices.Persistance
                 return false;
             }
 
-            if (Entities.ContainsKey(item.Id))
+            if (Entities.ContainsKey(item.EntityId))
             {
-                Entities[item.Id].Patch(item);
+                Entities[item.EntityId].Patch(item);
                 return true;
             }
 
-            Entities.Add(item.Id, item);
+            Entities.Add(item.EntityId, item);
             return true;
         }
 
@@ -56,7 +60,7 @@ namespace Silent.Practices.Persistance
             return true;
         }
 
-        public virtual bool Delete(TKey key)
+        public virtual bool DeleteById(TKey key)
         {
             if (!Entities.ContainsKey(key))
             {
@@ -65,10 +69,17 @@ namespace Silent.Practices.Persistance
 
             return Entities.Remove(key);
         }
+
+        public bool Delete(TEntity entity)
+        {
+            return Entities.Remove(entity.EntityId);
+        }
     }
 
-    public class MemoryRepository<TEntity> : MemoryRepository<TEntity, uint>, IRepository<TEntity>
-        where TEntity : IEntity<uint>
+    public class MemoryRepository<TEntity> : 
+        MemoryRepository<TEntity, Guid>, 
+        IRepositoryWithGuidKey<TEntity>
+        where TEntity : EntityWithGuidKey
     {
     }
 }

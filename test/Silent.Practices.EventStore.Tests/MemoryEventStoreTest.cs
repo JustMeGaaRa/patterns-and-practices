@@ -10,8 +10,8 @@ namespace Silent.Practices.EventStore.Tests
         public void SaveEvents_NullObject_ShouldThrowException()
         {
             // Arrange
-            IComparer<IEvent> comparer = CreateEventComparer();
-            IEventStore<uint, IEvent> eventStore = new MemoryEventStore<uint, IEvent>(comparer);
+            IComparer<Event> comparer = CreateEventComparer();
+            IEventStore<uint, Event> eventStore = new MemoryEventStore<uint, Event>(comparer);
 
             // Act, Assert
             Assert.Throws<ArgumentNullException>(() => eventStore.SaveEvents(1, null));
@@ -21,9 +21,9 @@ namespace Silent.Practices.EventStore.Tests
         public void SaveEvents_WithEmptyArray_ShouldReturnTrue()
         {
             // Arrange
-            IEvent[] fakeEvents = {};
-            IComparer<IEvent> comparer = CreateEventComparer();
-            IEventStore<uint, IEvent> eventStore = new MemoryEventStore<uint, IEvent>(comparer);
+            Event[] fakeEvents = {};
+            IComparer<Event> comparer = CreateEventComparer();
+            IEventStore<uint, Event> eventStore = new MemoryEventStore<uint, Event>(comparer);
 
             // Act
             bool result = eventStore.SaveEvents(1, fakeEvents);
@@ -36,9 +36,9 @@ namespace Silent.Practices.EventStore.Tests
         public void SaveEvents_WithNotEmptyArray_ShouldReturnTrue()
         {
             // Arrange
-            IEvent[] fakeEvents = { new FakeEvent() };
-            IComparer<IEvent> comparer = CreateEventComparer();
-            IEventStore<uint, IEvent> eventStore = new MemoryEventStore<uint, IEvent>(comparer);
+            Event[] fakeEvents = { new FakeEvent() };
+            IComparer<Event> comparer = CreateEventComparer();
+            IEventStore<uint, Event> eventStore = new MemoryEventStore<uint, Event>(comparer);
 
             // Act
             bool result = eventStore.SaveEvents(1, fakeEvents);
@@ -51,11 +51,11 @@ namespace Silent.Practices.EventStore.Tests
         public void GetEventsById_OnEmptyStore_ShouldReturnEmptyCollection()
         {
             // Arrange
-            IComparer<IEvent> comparer = CreateEventComparer();
-            IEventStore<uint, IEvent> eventStore = new MemoryEventStore<uint, IEvent>(comparer);
+            IComparer<Event> comparer = CreateEventComparer();
+            IEventStore<uint, Event> eventStore = new MemoryEventStore<uint, Event>(comparer);
 
             // Act
-            IReadOnlyCollection<IEvent> result = eventStore.GetEventsById(1);
+            IReadOnlyCollection<Event> result = eventStore.GetEventsById(1);
 
             // Assert
             Assert.Empty(result);
@@ -66,13 +66,13 @@ namespace Silent.Practices.EventStore.Tests
         {
             // Arrange
             uint eventAggregateId = 1;
-            IEvent[] fakeEvents = { new FakeEvent() };
-            IComparer<IEvent> comparer = CreateEventComparer();
-            IEventStore<uint, IEvent> eventStore = new MemoryEventStore<uint, IEvent>(comparer);
+            Event[] fakeEvents = { new FakeEvent() };
+            IComparer<Event> comparer = CreateEventComparer();
+            IEventStore<uint, Event> eventStore = new MemoryEventStore<uint, Event>(comparer);
             eventStore.SaveEvents(eventAggregateId, fakeEvents);
 
             // Act
-            IReadOnlyCollection<IEvent> result = eventStore.GetEventsById(2);
+            IReadOnlyCollection<Event> result = eventStore.GetEventsById(2);
 
             // Assert
             Assert.Empty(result);
@@ -83,25 +83,25 @@ namespace Silent.Practices.EventStore.Tests
         {
             // Arrange
             uint eventAggregateId = 1;
-            IEvent[] fakeEvents = { new FakeEvent() };
-            IComparer<IEvent> comparer = CreateEventComparer();
-            IEventStore<uint, IEvent> eventStore = new MemoryEventStore<uint, IEvent>(comparer);
+            Event[] fakeEvents = { new FakeEvent() };
+            IComparer<Event> comparer = CreateEventComparer();
+            IEventStore<uint, Event> eventStore = new MemoryEventStore<uint, Event>(comparer);
 
             // Act
             eventStore.SaveEvents(eventAggregateId, fakeEvents);
-            IEnumerable<IEvent> result = eventStore.GetEventsById(eventAggregateId);
+            IEnumerable<Event> result = eventStore.GetEventsById(eventAggregateId);
 
             // Assert
             Assert.NotNull(result);
             Assert.Single(result);
         }
 
-        private IComparer<IEvent> CreateEventComparer()
+        private IComparer<Event> CreateEventComparer()
         {
-            return Comparer<IEvent>.Create(CompareEvents);
+            return Comparer<Event>.Create(CompareEvents);
         }
 
-        private int CompareEvents(IEvent left, IEvent right)
+        private int CompareEvents(Event left, Event right)
         {
             if (left.Timestamp > right.Timestamp)
             {
@@ -114,7 +114,17 @@ namespace Silent.Practices.EventStore.Tests
             return 0;
         }
 
-        private class FakeEvent : Event<uint>
+        private class Event
+        {
+            public Event()
+            {
+                Timestamp = DateTime.Now;
+            }
+
+            public DateTime Timestamp { get; set; }
+        }
+
+        private class FakeEvent : Event
         {
         }
     }

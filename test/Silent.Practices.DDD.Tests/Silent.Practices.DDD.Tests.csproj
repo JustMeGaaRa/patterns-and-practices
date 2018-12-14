@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Silent.Practices.DDD\Silent.Practices.DDD.csproj" />
-    <ProjectReference Include="..\..\src\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

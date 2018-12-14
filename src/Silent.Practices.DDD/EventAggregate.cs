@@ -1,15 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using Silent.Practices.Persistance;
 
 namespace Silent.Practices.DDD
 {
-    public abstract class EventAggregate<TKey, TEventBase> : EntityBase<TKey>
+    public abstract class EventAggregate : EntityWithGuidKey, IArchivable
     {
-        private readonly List<TEventBase> _uncommittedChanges = new List<TEventBase>();
-        private readonly Dictionary<Type, Action<TEventBase>> _eventHandlers = new Dictionary<Type, Action<TEventBase>>();
+        private readonly List<EventWithGuidKey> _uncommittedChanges = new List<EventWithGuidKey>();
+        private readonly Dictionary<Type, Action<EventWithGuidKey>> _eventHandlers = new Dictionary<Type, Action<EventWithGuidKey>>();
 
-        public IReadOnlyCollection<TEventBase> GetUncommitted()
+        public EventAggregate()
+        {
+            RegisterEventHandler<EventAggregateArchivedEvent>(x => InternalSetArchived());
+        }
+
+        public bool IsArchived { get; private set; }
+
+        public void Archive()
+        {
+            InternalSetArchived();
+            AddUncommitedEvent(new EventAggregateArchivedEvent(EntityId));
+        }
+
+        public IReadOnlyCollection<EventWithGuidKey> GetUncommitted()
         {
             return _uncommittedChanges;
         }
@@ -19,32 +31,37 @@ namespace Silent.Practices.DDD
             _uncommittedChanges.Clear();
         }
 
-        public void ApplyHistory(IEnumerable<TEventBase> historicalEvents)
+        public void ApplyHistory(IEnumerable<EventWithGuidKey> historicalEvents)
         {
             if (historicalEvents == null)
             {
                 throw new ArgumentNullException(nameof(historicalEvents));
             }
 
-            foreach (TEventBase historyEvent in historicalEvents)
+            foreach (EventWithGuidKey historyEvent in historicalEvents)
             {
                 // NOTE: propagates generic TEvent type as base type
                 ApplyEvent(historyEvent, false);
             }
         }
 
-        protected void RegisterEventHandler<TEvent>(Action<TEvent> handler) where TEvent : TEventBase
+        protected void RegisterEventHandler<TEvent>(Action<TEvent> handler) where TEvent : EventWithGuidKey
         {
-            Action<TEventBase> genericHandler = eventInstance => handler.Invoke((TEvent)eventInstance);
+            Action<EventWithGuidKey> genericHandler = eventInstance => handler.Invoke((TEvent)eventInstance);
             _eventHandlers[typeof(TEvent)] = genericHandler;
         }
 
-        protected void ApplyEvent<TEvent>(TEvent instance) where TEvent : TEventBase
+        protected void AddUncommitedEvent<TEvent>(TEvent instance) where TEvent : EventWithGuidKey
+        {
+            _uncommittedChanges.Add(instance);
+        }
+
+        protected void ApplyEvent<TEvent>(TEvent instance) where TEvent : EventWithGuidKey
         {
             ApplyEvent(instance, true);
         }
 
-        private void ApplyEvent<TEvent>(TEvent instance, bool isNew) where TEvent : TEventBase
+        private void ApplyEvent<TEvent>(TEvent instance, bool isNew) where TEvent : EventWithGuidKey
         {
             if (instance == null)
             {
@@ -65,6 +82,11 @@ namespace Silent.Practices.DDD
             }
 
             _eventHandlers[instance.GetType()].Invoke(instance);
+        }
+
+        private void InternalSetArchived()
+        {
+            IsArchived = true;
         }
     }
 }

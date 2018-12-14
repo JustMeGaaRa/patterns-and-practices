@@ -11,10 +11,10 @@ namespace Silent.Practices.DDD.Tests
         public void GetUncommitted_OnEmptyAggregate_ShouldReturnEmptyCollection()
         {
             // Arrange
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
+            EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act
-            IEnumerable<Event> result = eventAggregate.GetUncommitted();
+            IEnumerable<EventWithGuidKey> result = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.NotNull(result);
@@ -25,10 +25,10 @@ namespace Silent.Practices.DDD.Tests
         public void GetUncommitted_OnCreatedAggregate_ShouldReturnCollection()
         {
             // Arrange
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate(1);
+            EventAggregate eventAggregate = new FakeEventAggregate(Guid.NewGuid());
 
             // Act
-            IEnumerable<Event> result = eventAggregate.GetUncommitted();
+            IEnumerable<EventWithGuidKey> result = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.NotNull(result);
@@ -39,11 +39,11 @@ namespace Silent.Practices.DDD.Tests
         public void MarkAsCommitted_OnEmptyAggregate_ShouldNotContainUncommitted()
         {
             // Arrange
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
+            EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act
             eventAggregate.MarkAsCommitted();
-            IEnumerable<Event> uncommitted = eventAggregate.GetUncommitted();
+            IEnumerable<EventWithGuidKey> uncommitted = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.Empty(uncommitted);
@@ -53,11 +53,11 @@ namespace Silent.Practices.DDD.Tests
         public void MarkAsCommitted_OnCreatedAggregate_ShouldNotContainUncommitted()
         {
             // Arrange
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate(1);
+            EventAggregate eventAggregate = new FakeEventAggregate(Guid.NewGuid());
 
             // Act
             eventAggregate.MarkAsCommitted();
-            IEnumerable<Event> uncommitted = eventAggregate.GetUncommitted();
+            IEnumerable<EventWithGuidKey> uncommitted = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.Empty(uncommitted);
@@ -67,7 +67,7 @@ namespace Silent.Practices.DDD.Tests
         public void ApplyHistory_NullCollection_ShouldThrowException()
         {
             // Arrange
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
+            EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act, Assert
             Assert.Throws<ArgumentNullException>(() => eventAggregate.ApplyHistory(null));
@@ -77,26 +77,26 @@ namespace Silent.Practices.DDD.Tests
         public void ApplyHistory_WithNotEmptyEventHistory_ShouldApplyChanges()
         {
             // Arrange
-            uint eventAggregateId = 1;
-            Event createdEvent = new FakeCreatedEvent(eventAggregateId);
-            IEnumerable<Event> historyEvents = new [] { createdEvent };
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
+            Guid eventAggregateId = Guid.NewGuid();
+            EventWithGuidKey createdEvent = new FakeCreatedEvent(eventAggregateId);
+            IEnumerable<EventWithGuidKey> historyEvents = new [] { createdEvent };
+            EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act
-            uint beforeChangesId = eventAggregate.Id;
+            Guid beforeChangesId = eventAggregate.EntityId;
             eventAggregate.ApplyHistory(historyEvents);
 
             // Assert
             Assert.NotEqual(eventAggregateId, beforeChangesId);
-            Assert.Equal(eventAggregateId, eventAggregate.Id);
+            Assert.Equal(eventAggregateId, eventAggregate.EntityId);
         }
 
         [Fact]
         public void ApplyHistory_WithNullObject_ShouldThrowException()
         {
             // Arrange
-            IEnumerable<Event> historyEvents = new Event[] { null };
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
+            IEnumerable<EventWithGuidKey> historyEvents = new EventWithGuidKey[] { null };
+            EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act, Assert
             Assert.Throws<ArgumentNullException>(() => eventAggregate.ApplyHistory(historyEvents));
@@ -106,9 +106,9 @@ namespace Silent.Practices.DDD.Tests
         public void ApplyHistory_WithNotSupportedEventType_ShouldThrowException()
         {
             // Arrange
-            Event deletedEvent = new FakeDeletedEvent(1);
-            IEnumerable<Event> historyEvents = new[] { deletedEvent };
-            EventAggregate<uint, Event> eventAggregate = new FakeEventAggregate();
+            EventWithGuidKey deletedEvent = new FakeDeletedEvent(Guid.NewGuid());
+            IEnumerable<EventWithGuidKey> historyEvents = new[] { deletedEvent };
+            EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act, Assert
             Assert.Throws<NotSupportedException>(() => eventAggregate.ApplyHistory(historyEvents));

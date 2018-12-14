@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Silent.Practices.DDD;
+using Xunit;
 
 namespace Silent.Practices.Persistance.Tests
 {
@@ -10,8 +11,8 @@ namespace Silent.Practices.Persistance.Tests
         public void Equals_OnInstances_ShouldReturnCorrectResult(int firstId, int secondId, bool expected)
         {
             // Arrange
-            FakeEntity fakeEntity1 = new FakeEntity { Id = firstId };
-            FakeEntity fakeEntity2 = new FakeEntity { Id = secondId };
+            FakeEntity fakeEntity1 = new FakeEntity { EntityId = firstId };
+            FakeEntity fakeEntity2 = new FakeEntity { EntityId = secondId };
 
             // Act
             bool result = fakeEntity1.Equals(fakeEntity2);
@@ -26,8 +27,8 @@ namespace Silent.Practices.Persistance.Tests
         public void GetHashCode_OnInstancesWithSameIds_ShouldHaveSameHasCode(int firstId, int secondId, bool expected)
         {
             // Arrange
-            FakeEntity fakeEntity1 = new FakeEntity { Id = firstId };
-            FakeEntity fakeEntity2 = new FakeEntity { Id = secondId };
+            FakeEntity fakeEntity1 = new FakeEntity { EntityId = firstId };
+            FakeEntity fakeEntity2 = new FakeEntity { EntityId = secondId };
 
             // Act
             int hashCode1 = fakeEntity1.GetHashCode();
@@ -37,7 +38,7 @@ namespace Silent.Practices.Persistance.Tests
             Assert.Equal(expected, hashCode1 == hashCode2);
         }
 
-        private class FakeEntity : EntityBase<int>
+        private class FakeEntity : EntityWithIntKey
         {
         }
     }

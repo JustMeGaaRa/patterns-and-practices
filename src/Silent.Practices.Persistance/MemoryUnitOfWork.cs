@@ -1,3 +1,4 @@
+using Silent.Practices.DDD;
 using System;
 using System.Collections.Generic;
 
@@ -12,16 +13,16 @@ namespace Silent.Practices.Persistance
             _repositories = new Dictionary<Type, object>();
         }
 
-        public void UseRepository<TEntity>(IRepository<TEntity> repository) where TEntity : EntityBase<uint>
+        public void UseRepository<TEntity>(IRepositoryWithGuidKey<TEntity> repository) where TEntity : EntityWithGuidKey
         {
             _repositories[typeof(TEntity)] = repository;
         }
 
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase<uint>
+        public IRepositoryWithGuidKey<TEntity> GetRepository<TEntity>() where TEntity : EventWithGuidKey
         {
-            Type entityType = typeof (TEntity);
-            IRepository<TEntity> repository = _repositories.ContainsKey(entityType)
-                ? _repositories[entityType] as IRepository<TEntity>
+            Type entityType = typeof(TEntity);
+            IRepositoryWithGuidKey<TEntity> repository = _repositories.ContainsKey(entityType)
+                ? _repositories[entityType] as IRepositoryWithGuidKey<TEntity>
                 : null;
             return repository;
         }

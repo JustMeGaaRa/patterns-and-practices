@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/JustMeGaaRa/Silent.Practices</PackageProjectUrl>
     <Copyright>Pavlo Hodysh (c) 2017</Copyright>
@@ -16,6 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Silent.Practices.DDD\Silent.Practices.DDD.csproj" />
+    <ProjectReference Include="..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
     <ProjectReference Include="..\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj" />
     <ProjectReference Include="..\Silent.Practices.Patterns\Silent.Practices.Patterns.csproj" />
   </ItemGroup>
