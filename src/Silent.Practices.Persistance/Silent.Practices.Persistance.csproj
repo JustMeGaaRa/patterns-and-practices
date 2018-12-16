@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Silent.Practices.DDD\Silent.Practices.DDD.csproj" />
     <ProjectReference Include="..\Silent.Practices.EventStore\Silent.Practices.EventStore.csproj" />
     <ProjectReference Include="..\Silent.Practices.Extensions\Silent.Practices.Extensions.csproj" />

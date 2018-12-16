@@ -29,12 +29,12 @@ namespace Silent.Practices.Persistance
 
         public bool Commit()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool Rollback()
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

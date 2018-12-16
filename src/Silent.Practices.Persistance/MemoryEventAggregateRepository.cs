@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Silent.Practices.DDD
 {
-    public class MemoryEventAggregateRepository<TEntity> :
-        IEventSourcedRepository<TEntity>
-        where TEntity : EventAggregate, new()
+    public class MemoryEventAggregateRepository<TEntity> : IEventSourcedRepository<TEntity> where TEntity : EventAggregate, new()
     {
         private readonly IEventStore<Guid, EventWithGuidKey> _eventStore;
 

@@ -22,16 +22,13 @@ namespace Silent.Practices.Persistance.Tests
         }
 
         [Fact]
-        public async void Add_NullObject_ShouldReturnFalse()
+        public void Add_NullObject_ShouldThrowException()
         {
             // Arrange
             IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
-
-            // Act
-            bool result = await repository.SaveAsync(null);
-
-            // Assert
-            Assert.False(result);
+            
+            // Act, Assert
+            Assert.ThrowsAsync<ArgumentNullException>(() => repository.SaveAsync(null));
         }
 
         [Fact]

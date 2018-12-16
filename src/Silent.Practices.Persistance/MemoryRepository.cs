@@ -7,20 +7,18 @@ using Silent.Practices.Extensions;
 
 namespace Silent.Practices.Persistance
 {
-    public class MemoryRepository<TEntity, TKey> : 
-        IRepository<TEntity, TKey> 
-        where TEntity : Entity<TKey>
+    public class MemoryRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : Entity<TKey>
     {
         protected readonly Dictionary<TKey, TEntity> Entities = new Dictionary<TKey, TEntity>();
 
         public virtual Task<TEntity> FindByIdAsync(TKey id)
         {
-            if (!Entities.ContainsKey(id))
+            if (Entities.ContainsKey(id))
             {
-                throw new KeyNotFoundException();
+                return Task.FromResult(Entities[id]);
             }
 
-            return Task.FromResult(Entities[id]);
+            return Task.FromResult((TEntity)null);
         }
 
         public virtual Task<ICollection<TEntity>> GetAllAsync()
@@ -29,36 +27,20 @@ namespace Silent.Practices.Persistance
             return Task.FromResult(entities);
         }
 
-        public virtual Task<bool> SaveAsync(TEntity item)
-        {
-            if (item == null)
-            {
-                return Task.FromResult(false);
-            }
-
-            if (Entities.ContainsKey(item.EntityId))
-            {
-                Entities[item.EntityId].Patch(item);
-                return Task.FromResult(true);
-            }
-
-            Entities.Add(item.EntityId, item);
-            return Task.FromResult(true);
-        }
-
-        public virtual Task<bool> Update(TKey key, TEntity entity)
+        public virtual Task<bool> SaveAsync(TEntity entity)
         {
             if (entity == null)
             {
-                return Task.FromResult(false);
+                throw new ArgumentNullException(nameof(entity));
             }
 
-            if (!Entities.ContainsKey(key))
+            if (Entities.ContainsKey(entity.EntityId))
             {
-                return Task.FromResult(false);
+                Entities[entity.EntityId].Patch(entity);
+                return Task.FromResult(true);
             }
 
-            Entities[key].Patch(entity);
+            Entities.Add(entity.EntityId, entity);
             return Task.FromResult(true);
         }
 
@@ -72,14 +54,19 @@ namespace Silent.Practices.Persistance
             return Task.FromResult(Entities.Remove(key));
         }
 
-        public Task<bool> DeleteAsync(TEntity entity)
+        public virtual Task<bool> DeleteAsync(TEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             return Task.FromResult(Entities.Remove(entity.EntityId));
         }
     }
 
-    public class MemoryRepository<TEntity> : 
-        MemoryRepository<TEntity, Guid>, 
+    public class MemoryRepository<TEntity> :
+        MemoryRepository<TEntity, Guid>,
         IRepositoryWithGuidKey<TEntity>
         where TEntity : EntityWithGuidKey
     {

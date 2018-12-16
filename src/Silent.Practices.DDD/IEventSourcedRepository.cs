@@ -2,9 +2,7 @@
 
 namespace Silent.Practices.DDD
 {
-    public interface IEventSourcedRepository<TEntity> : 
-        IRepositoryWithGuidKey<TEntity> 
-        where TEntity : EventAggregate
+    public interface IEventSourcedRepository<TEntity> : IRepositoryWithGuidKey<TEntity> where TEntity : EventAggregate
     {
     }
 }
