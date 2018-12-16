@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Silent.Practices.Persistance
 {
     public interface IRepository<TEntity, in TKey>
     {
-        TEntity FindById(TKey id);
+        Task<TEntity> FindByIdAsync(TKey id);
 
-        ICollection<TEntity> GetAll();
+        Task<ICollection<TEntity>> GetAllAsync();
 
-        bool Add(TEntity entity);
+        Task<bool> SaveAsync(TEntity entity);
 
-        bool Update(TKey key, TEntity entity);
+        Task<bool> DeleteAsync(TEntity entity);
 
-        bool Delete(TEntity entity);
-
-        bool DeleteById(TKey key);
+        Task<bool> DeleteByIdAsync(TKey key);
     }
 
     public interface IRepositoryWithIntKey<TEntity> : IRepository<TEntity, uint>

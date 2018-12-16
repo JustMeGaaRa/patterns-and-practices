@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Silent.Practices.DDD;
 using Silent.Practices.Extensions;
 
@@ -12,67 +13,68 @@ namespace Silent.Practices.Persistance
     {
         protected readonly Dictionary<TKey, TEntity> Entities = new Dictionary<TKey, TEntity>();
 
-        public virtual TEntity FindById(TKey id)
+        public virtual Task<TEntity> FindByIdAsync(TKey id)
         {
             if (!Entities.ContainsKey(id))
             {
                 throw new KeyNotFoundException();
             }
 
-            return Entities[id];
+            return Task.FromResult(Entities[id]);
         }
 
-        public virtual ICollection<TEntity> GetAll()
+        public virtual Task<ICollection<TEntity>> GetAllAsync()
         {
-            return Entities.Values.ToList();
+            ICollection<TEntity> entities = Entities.Values.ToList();
+            return Task.FromResult(entities);
         }
 
-        public virtual bool Add(TEntity item)
+        public virtual Task<bool> SaveAsync(TEntity item)
         {
             if (item == null)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             if (Entities.ContainsKey(item.EntityId))
             {
                 Entities[item.EntityId].Patch(item);
-                return true;
+                return Task.FromResult(true);
             }
 
             Entities.Add(item.EntityId, item);
-            return true;
+            return Task.FromResult(true);
         }
 
-        public virtual bool Update(TKey key, TEntity entity)
+        public virtual Task<bool> Update(TKey key, TEntity entity)
         {
             if (entity == null)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             if (!Entities.ContainsKey(key))
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             Entities[key].Patch(entity);
-            return true;
+            return Task.FromResult(true);
         }
 
-        public virtual bool DeleteById(TKey key)
+        public virtual Task<bool> DeleteByIdAsync(TKey key)
         {
             if (!Entities.ContainsKey(key))
             {
-                return false;
+                return Task.FromResult(false);
             }
 
-            return Entities.Remove(key);
+            return Task.FromResult(Entities.Remove(key));
         }
 
-        public bool Delete(TEntity entity)
+        public Task<bool> DeleteAsync(TEntity entity)
         {
-            return Entities.Remove(entity.EntityId);
+            return Task.FromResult(Entities.Remove(entity.EntityId));
         }
     }
 

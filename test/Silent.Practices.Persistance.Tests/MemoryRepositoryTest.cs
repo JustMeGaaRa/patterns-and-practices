@@ -8,34 +8,34 @@ namespace Silent.Practices.Persistance.Tests
     public class MemoryRepositoryTest
     {
         [Fact]
-        public void Add_NewEntity_ShouldReturnTrue()
+        public async void Add_NewEntity_ShouldReturnTrue()
         {
             // Arrange
             IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
             FakeEntity fakeEntity = new FakeEntity { EntityId = Guid.NewGuid() };
 
             // Act
-            bool result = repository.Add(fakeEntity);
+            bool result = await repository.SaveAsync(fakeEntity);
 
             // Assert
             Assert.True(result);
         }
 
         [Fact]
-        public void Add_NullObject_ShouldReturnFalse()
+        public async void Add_NullObject_ShouldReturnFalse()
         {
             // Arrange
             IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
 
             // Act
-            bool result = repository.Add(null);
+            bool result = await repository.SaveAsync(null);
 
             // Assert
             Assert.False(result);
         }
 
         [Fact]
-        public void Add_ModifiedViaNewInstance_ShouldUpdateOriginal()
+        public async void Add_ModifiedViaNewInstance_ShouldUpdateOriginal()
         {
             // Arrange
             string oldValue = "Old Value";
@@ -55,8 +55,8 @@ namespace Silent.Practices.Persistance.Tests
             };
 
             // Act
-            bool result = repository.Add(originalEntity);
-            result = result && repository.Add(modifiedEntity);
+            bool result = await repository.SaveAsync(originalEntity);
+            result = result && await repository.SaveAsync(modifiedEntity);
 
             // Assert
             Assert.True(result);
@@ -71,7 +71,7 @@ namespace Silent.Practices.Persistance.Tests
             IRepositoryWithGuidKey<FakeEntity> repository = new MemoryRepository<FakeEntity>();
 
             // Act, Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.FindById(Guid.NewGuid()));
+            Assert.ThrowsAsync<KeyNotFoundException>(() => repository.FindByIdAsync(Guid.NewGuid()));
         }
 
         [Fact]
@@ -82,14 +82,14 @@ namespace Silent.Practices.Persistance.Tests
             FakeEntity fakeEntity = new FakeEntity { EntityId = Guid.NewGuid() };
 
             // Act
-            repository.Add(fakeEntity);
+            repository.SaveAsync(fakeEntity);
 
             // Assert
-            Assert.Throws<KeyNotFoundException>(() => repository.FindById(Guid.NewGuid()));
+            Assert.ThrowsAsync<KeyNotFoundException>(() => repository.FindByIdAsync(Guid.NewGuid()));
         }
 
         [Fact]
-        public void GetById_WithExistingId_ShouldReturnEntity()
+        public async void GetById_WithExistingId_ShouldReturnEntity()
         {
             // Arrange
             Guid entityId = Guid.NewGuid();
@@ -97,8 +97,8 @@ namespace Silent.Practices.Persistance.Tests
             FakeEntity fakeEntity = new FakeEntity { EntityId = entityId };
 
             // Act
-            repository.Add(fakeEntity);
-            var result = repository.FindById(entityId);
+            await repository.SaveAsync(fakeEntity);
+            FakeEntity result = await repository.FindByIdAsync(entityId);
 
             // Assert
             Assert.NotNull(result);

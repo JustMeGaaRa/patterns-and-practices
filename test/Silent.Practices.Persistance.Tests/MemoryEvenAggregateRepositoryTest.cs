@@ -26,11 +26,11 @@ namespace Silent.Practices.DDD.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act, Assert
-            Assert.Throws<ArgumentNullException>(() => repository.Add(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => repository.SaveAsync(null));
         }
 
         [Fact]
-        public void Add_EmptyFakeObject_ShouldBeIgnored()
+        public async void Add_EmptyFakeObject_ShouldBeIgnored()
         {
             // Arrange
             Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
@@ -40,7 +40,7 @@ namespace Silent.Practices.DDD.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            bool result = repository.Add(fakeEventAggregate);
+            bool result = await repository.SaveAsync(fakeEventAggregate);
 
             // Assert
             Assert.False(result);
@@ -48,7 +48,7 @@ namespace Silent.Practices.DDD.Tests
         }
 
         [Fact]
-        public void Add_FakeObject_ShouldBeSaved()
+        public async void Add_FakeObject_ShouldBeSaved()
         {
             // Arrange
             Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
@@ -58,7 +58,7 @@ namespace Silent.Practices.DDD.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            bool result = repository.Add(fakeEventAggregate);
+            bool result = await repository.SaveAsync(fakeEventAggregate);
 
             // Assert
             Assert.True(result);
@@ -66,7 +66,7 @@ namespace Silent.Practices.DDD.Tests
         }
 
         [Fact]
-        public void GetById_OnEmptyRepository_ShouldReturnNull()
+        public async void GetById_OnEmptyRepository_ShouldReturnNull()
         {
             // Arrange
             Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
@@ -75,14 +75,14 @@ namespace Silent.Practices.DDD.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            var result = repository.FindById(Guid.NewGuid());
+            FakeEventAggregate result = await repository.FindByIdAsync(Guid.NewGuid());
 
             // Assert
             Assert.Null(result);
         }
 
         [Fact]
-        public void GetById_WithExistingid_ShouldReturnNotNull()
+        public async void GetById_WithExistingid_ShouldReturnNotNull()
         {
             // Arrange
             Guid eventAggregateId = Guid.NewGuid();
@@ -92,7 +92,7 @@ namespace Silent.Practices.DDD.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            var result = repository.FindById(eventAggregateId);
+            FakeEventAggregate result = await repository.FindByIdAsync(eventAggregateId);
 
             // Assert
             Assert.NotNull(result);
@@ -109,7 +109,7 @@ namespace Silent.Practices.DDD.Tests
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
-            repository.FindById(Guid.NewGuid());
+            repository.FindByIdAsync(Guid.NewGuid());
 
             // Assert
             eventStoreMock.Verify(m => m.GetEventsById(It.IsAny<Guid>()), Times.Once);

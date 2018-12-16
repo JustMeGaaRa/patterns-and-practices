@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Silent.Practices.DDD
 {
@@ -16,39 +17,23 @@ namespace Silent.Practices.DDD
             _eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
         }
 
-        public virtual TEntity FindById(Guid id)
+        public virtual Task<TEntity> FindByIdAsync(Guid id)
         {
-            TEntity eventAggregate = null;
             IEnumerable<EventWithGuidKey> committed = _eventStore.GetEventsById(id);
-
-            if (committed != null && committed.Any())
-            {
-                eventAggregate = new TEntity();
-                eventAggregate.ApplyHistory(committed);
-            }
-            
-            return eventAggregate;
+            TEntity eventAggregate = CreateAggregateFromHistory(committed);            
+            return Task.FromResult(eventAggregate);
         }
 
-        public virtual ICollection<TEntity> GetAll()
+        public virtual Task<ICollection<TEntity>> GetAllAsync()
         {
-            return _eventStore.GetEvents()
+            ICollection<TEntity> entities = _eventStore.GetEvents()
                 .GroupBy(x => x.EntityId)
-                .Select(x => FindById(x.Key))
+                .Select(events => CreateAggregateFromHistory(events))
                 .ToList();
+            return Task.FromResult(entities);
         }
 
-        public virtual bool Add(TEntity entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            return Update(entity.EntityId, entity);
-        }
-
-        public virtual bool Update(Guid key, TEntity entity)
+        public virtual Task<bool> SaveAsync(TEntity entity)
         {
             if (entity == null)
             {
@@ -56,19 +41,38 @@ namespace Silent.Practices.DDD
             }
 
             IReadOnlyCollection<EventWithGuidKey> uncommitted = entity.GetUncommitted();
-            return uncommitted.Any() && _eventStore.SaveEvents(key, uncommitted);
+            bool successfull = uncommitted.Any() && _eventStore.SaveEvents(entity.EntityId, uncommitted);
+            return Task.FromResult(successfull);
         }
 
-        public virtual bool DeleteById(Guid key)
+        public virtual async Task<bool> DeleteByIdAsync(Guid key)
         {
-            FindById(key)?.Archive();
-            return true;
-        }
-
-        public bool Delete(TEntity entity)
-        {
+            TEntity entity = await FindByIdAsync(key);
             entity?.Archive();
             return true;
+        }
+
+        public Task<bool> DeleteAsync(TEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            entity?.Archive();
+            return Task.FromResult(true);
+        }
+
+        private TEntity CreateAggregateFromHistory(IEnumerable<EventWithGuidKey> events)
+        {
+            if (events != null && events.Any())
+            {
+                TEntity eventAggregate = new TEntity();
+                eventAggregate.ApplyHistory(events);
+                return eventAggregate;
+            }
+
+            return null;
         }
     }
 }
