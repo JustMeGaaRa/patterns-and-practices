@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Silent.Practices.DDD
 {
-    public class MemoryEventAggregateRepository<TEntity> : IEventSourcedRepository<TEntity> where TEntity : EventAggregate, new()
+    public class MemoryEventAggregateRepository<TEntity> : IEventSourcedRepository<TEntity, Guid> where TEntity : EventAggregate<Guid>, new()
     {
-        private readonly IEventStore<Guid, EventWithGuidKey> _eventStore;
+        private readonly IEventStore<Guid, Event<Guid>> _eventStore;
 
-        public MemoryEventAggregateRepository(IEventStore<Guid, EventWithGuidKey> eventStore)
+        public MemoryEventAggregateRepository(IEventStore<Guid, Event<Guid>> eventStore)
         {
             _eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
         }
 
         public virtual Task<TEntity> FindByIdAsync(Guid id)
         {
-            IEnumerable<EventWithGuidKey> committed = _eventStore.GetEventsById(id);
+            IEnumerable<Event<Guid>> committed = _eventStore.GetEventsById(id);
             TEntity eventAggregate = CreateAggregateFromHistory(committed);            
             return Task.FromResult(eventAggregate);
         }
@@ -38,7 +38,7 @@ namespace Silent.Practices.DDD
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            IReadOnlyCollection<EventWithGuidKey> uncommitted = entity.GetUncommitted();
+            IReadOnlyCollection<Event<Guid>> uncommitted = entity.GetUncommitted();
             bool successfull = uncommitted.Any() && _eventStore.SaveEvents(entity.EntityId, uncommitted);
             return Task.FromResult(successfull);
         }
@@ -61,7 +61,7 @@ namespace Silent.Practices.DDD
             return Task.FromResult(true);
         }
 
-        private TEntity CreateAggregateFromHistory(IEnumerable<EventWithGuidKey> events)
+        private TEntity CreateAggregateFromHistory(IEnumerable<Event<Guid>> events)
         {
             if (events != null && events.Any())
             {

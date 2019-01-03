@@ -2,9 +2,9 @@
 
 namespace Silent.Practices.DDD
 {
-    public class EventAggregateArchivedEvent : EventWithGuidKey
+    public class EventAggregateArchivedEvent<TKey> : Event<TKey>
     {
-        public EventAggregateArchivedEvent(Guid entityId) : base(entityId)
+        public EventAggregateArchivedEvent(TKey entityId) : base(entityId)
         {
         }
     }

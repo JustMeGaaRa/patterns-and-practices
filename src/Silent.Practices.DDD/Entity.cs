@@ -26,14 +26,12 @@ namespace Silent.Practices.DDD
 
     public abstract class EntityWithGuidKey : Entity<Guid>
     {
-        protected EntityWithGuidKey()
-        {
-            EntityId = Guid.NewGuid();
-        }
+        protected EntityWithGuidKey() => EntityId = Guid.NewGuid();
     }
 
     public abstract class EntityWithStringKey : Entity<string>
     {
+        protected EntityWithStringKey() => EntityId = Guid.NewGuid().ToString();
     }
 
     public abstract class EntityWithIntKey : Entity<int>

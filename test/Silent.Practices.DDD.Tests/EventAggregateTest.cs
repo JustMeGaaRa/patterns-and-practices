@@ -14,7 +14,7 @@ namespace Silent.Practices.DDD.Tests
             EventAggregate eventAggregate = new FakeEventAggregate();
 
             // Act
-            IEnumerable<EventWithGuidKey> result = eventAggregate.GetUncommitted();
+            IEnumerable<Event<Guid>> result = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.NotNull(result);
@@ -28,7 +28,7 @@ namespace Silent.Practices.DDD.Tests
             EventAggregate eventAggregate = new FakeEventAggregate(Guid.NewGuid());
 
             // Act
-            IEnumerable<EventWithGuidKey> result = eventAggregate.GetUncommitted();
+            IEnumerable<Event<Guid>> result = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.NotNull(result);
@@ -43,7 +43,7 @@ namespace Silent.Practices.DDD.Tests
 
             // Act
             eventAggregate.MarkAsCommitted();
-            IEnumerable<EventWithGuidKey> uncommitted = eventAggregate.GetUncommitted();
+            IEnumerable<Event<Guid>> uncommitted = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.Empty(uncommitted);
@@ -57,7 +57,7 @@ namespace Silent.Practices.DDD.Tests
 
             // Act
             eventAggregate.MarkAsCommitted();
-            IEnumerable<EventWithGuidKey> uncommitted = eventAggregate.GetUncommitted();
+            IEnumerable<Event<Guid>> uncommitted = eventAggregate.GetUncommitted();
 
             // Assert
             Assert.Empty(uncommitted);

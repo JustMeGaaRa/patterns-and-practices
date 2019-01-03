@@ -21,8 +21,8 @@ namespace Silent.Practices.DDD.Tests
         public void Add_NullObject_ShouldThrowException()
         {
             // Arrange
-            IEventStore<Guid, EventWithGuidKey> eventStore = CreateDummyEventStore();
-            IEventSourcedRepository<FakeEventAggregate> repository =
+            IEventStore<Guid, Event<Guid>> eventStore = CreateDummyEventStore();
+            IEventSourcedRepository<FakeEventAggregate, Guid> repository =
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act, Assert
@@ -33,10 +33,10 @@ namespace Silent.Practices.DDD.Tests
         public async void Add_EmptyFakeObject_ShouldBeIgnored()
         {
             // Arrange
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
-            IEventStore<Guid, EventWithGuidKey> eventStore = eventStoreMock.Object;
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = CreateEventStoreMock();
+            IEventStore<Guid, Event<Guid>> eventStore = eventStoreMock.Object;
             FakeEventAggregate fakeEventAggregate = new FakeEventAggregate();
-            IEventSourcedRepository<FakeEventAggregate> repository =
+            IEventSourcedRepository<FakeEventAggregate, Guid> repository =
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
@@ -44,17 +44,17 @@ namespace Silent.Practices.DDD.Tests
 
             // Assert
             Assert.False(result);
-            eventStoreMock.Verify(m => m.SaveEvents(It.IsAny<Guid>(), It.IsAny<IReadOnlyCollection<EventWithGuidKey>>()), Times.Never);
+            eventStoreMock.Verify(m => m.SaveEvents(It.IsAny<Guid>(), It.IsAny<IReadOnlyCollection<Event<Guid>>>()), Times.Never);
         }
 
         [Fact]
         public async void Add_FakeObject_ShouldBeSaved()
         {
             // Arrange
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
-            IEventStore<Guid, EventWithGuidKey> eventStore = eventStoreMock.Object;
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = CreateEventStoreMock();
+            IEventStore<Guid, Event<Guid>> eventStore = eventStoreMock.Object;
             FakeEventAggregate fakeEventAggregate = CreateDirtyFake(Guid.NewGuid());
-            IEventSourcedRepository<FakeEventAggregate> repository =
+            IEventSourcedRepository<FakeEventAggregate, Guid> repository =
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
@@ -62,16 +62,16 @@ namespace Silent.Practices.DDD.Tests
 
             // Assert
             Assert.True(result);
-            eventStoreMock.Verify(m => m.SaveEvents(It.IsAny<Guid>(), It.IsAny<IReadOnlyCollection<EventWithGuidKey>>()), Times.Once);
+            eventStoreMock.Verify(m => m.SaveEvents(It.IsAny<Guid>(), It.IsAny<IReadOnlyCollection<Event<Guid>>>()), Times.Once);
         }
 
         [Fact]
         public async void GetById_OnEmptyRepository_ShouldReturnNull()
         {
             // Arrange
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
-            IEventStore<Guid, EventWithGuidKey> eventStore = eventStoreMock.Object;
-            IEventSourcedRepository<FakeEventAggregate> repository =
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = CreateEventStoreMock();
+            IEventStore<Guid, Event<Guid>> eventStore = eventStoreMock.Object;
+            IEventSourcedRepository<FakeEventAggregate, Guid> repository =
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
@@ -86,9 +86,9 @@ namespace Silent.Practices.DDD.Tests
         {
             // Arrange
             Guid eventAggregateId = Guid.NewGuid();
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock(eventAggregateId);
-            IEventStore<Guid, EventWithGuidKey> eventStore = eventStoreMock.Object;
-            IEventSourcedRepository<FakeEventAggregate> repository =
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = CreateEventStoreMock(eventAggregateId);
+            IEventStore<Guid, Event<Guid>> eventStore = eventStoreMock.Object;
+            IEventSourcedRepository<FakeEventAggregate, Guid> repository =
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
@@ -103,9 +103,9 @@ namespace Silent.Practices.DDD.Tests
         public void GetById_OnEmptyRepository_ShouldCallEventStore()
         {
             // Arrange
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
-            IEventStore<Guid, EventWithGuidKey> eventStore = eventStoreMock.Object;
-            IEventSourcedRepository<FakeEventAggregate> repository =
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = CreateEventStoreMock();
+            IEventStore<Guid, Event<Guid>> eventStore = eventStoreMock.Object;
+            IEventSourcedRepository<FakeEventAggregate, Guid> repository =
                 new MemoryEventAggregateRepository<FakeEventAggregate>(eventStore);
 
             // Act
@@ -115,23 +115,23 @@ namespace Silent.Practices.DDD.Tests
             eventStoreMock.Verify(m => m.GetEventsById(It.IsAny<Guid>()), Times.Once);
         }
 
-        private Mock<IEventStore<Guid, EventWithGuidKey>> CreateEventStoreMock(Guid eventAggregateId = default(Guid))
+        private Mock<IEventStore<Guid, Event<Guid>>> CreateEventStoreMock(Guid eventAggregateId = default(Guid))
         {
             var eventList = new List<EventWithGuidKey>
             {
                 new FakeCreatedEvent(eventAggregateId)
             };
 
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = new Mock<IEventStore<Guid, EventWithGuidKey>>();
-            eventStoreMock.Setup(m => m.SaveEvents(It.IsAny<Guid>(), It.IsAny<IReadOnlyCollection<EventWithGuidKey>>())).Returns(true);
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = new Mock<IEventStore<Guid, Event<Guid>>>();
+            eventStoreMock.Setup(m => m.SaveEvents(It.IsAny<Guid>(), It.IsAny<IReadOnlyCollection<Event<Guid>>>())).Returns(true);
             eventStoreMock.Setup(m => m.GetEventsById(eventAggregateId)).Returns(eventList);
 
             return eventStoreMock;
         }
 
-        private IEventStore<Guid, EventWithGuidKey> CreateDummyEventStore()
+        private IEventStore<Guid, Event<Guid>> CreateDummyEventStore()
         {
-            Mock<IEventStore<Guid, EventWithGuidKey>> eventStoreMock = CreateEventStoreMock();
+            Mock<IEventStore<Guid, Event<Guid>>> eventStoreMock = CreateEventStoreMock();
             return eventStoreMock.Object;
         }
 
