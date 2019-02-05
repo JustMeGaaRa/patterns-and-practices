@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Silent.Practices.DDD
 {
@@ -7,29 +8,30 @@ namespace Silent.Practices.DDD
     {
         private readonly List<Event<TKey>> _uncommittedChanges = new List<Event<TKey>>();
         private readonly Dictionary<Type, Action<Event<TKey>>> _eventHandlers = new Dictionary<Type, Action<Event<TKey>>>();
+        private long _currentAggregateVersion = 0;
 
         public EventAggregate()
         {
             RegisterEventHandler<EventAggregateArchivedEvent<TKey>>(x => InternalSetArchived());
         }
 
-        public bool IsArchived { get; private set; }
+        public long Version
+        {
+            get { return _currentAggregateVersion; }
+            protected set { _currentAggregateVersion = value; }
+        }
+
+        public bool IsArchived { get; protected set; }
 
         public void Archive()
         {
             InternalSetArchived();
-            AddUncommitedEvent(new EventAggregateArchivedEvent<TKey>(EntityId));
+            AddUncommitedEvent(new EventAggregateArchivedEvent<TKey>(EntityId, GetNextAggregateVersion()));
         }
 
-        public IReadOnlyCollection<Event<TKey>> GetUncommitted()
-        {
-            return _uncommittedChanges;
-        }
+        public IReadOnlyCollection<Event<TKey>> GetUncommitted() => _uncommittedChanges;
 
-        public void MarkAsCommitted()
-        {
-            _uncommittedChanges.Clear();
-        }
+        public void MarkAsCommitted() => _uncommittedChanges.Clear();
 
         public void ApplyHistory(IEnumerable<Event<TKey>> historicalEvents)
         {
@@ -51,15 +53,13 @@ namespace Silent.Practices.DDD
             _eventHandlers[typeof(TEvent)] = genericHandler;
         }
 
-        protected void AddUncommitedEvent<TEvent>(TEvent instance) where TEvent : Event<TKey>
-        {
-            _uncommittedChanges.Add(instance);
-        }
+        protected long GetNextAggregateVersion() => Interlocked.Increment(ref _currentAggregateVersion);
 
-        protected void ApplyEvent<TEvent>(TEvent instance) where TEvent : Event<TKey>
-        {
-            ApplyEvent(instance, true);
-        }
+        protected long RestoreAggregateVersion(long version) => Interlocked.Exchange(ref _currentAggregateVersion, version);
+
+        protected void AddUncommitedEvent<TEvent>(TEvent instance) where TEvent : Event<TKey> => _uncommittedChanges.Add(instance);
+
+        protected void ApplyEvent<TEvent>(TEvent instance) where TEvent : Event<TKey> => ApplyEvent(instance, true);
 
         private void ApplyEvent<TEvent>(TEvent instance, bool isNew) where TEvent : Event<TKey>
         {
@@ -81,13 +81,11 @@ namespace Silent.Practices.DDD
                 throw new NotSupportedException($"Event of type '{typeof(TEvent)}' cannot be handled because no handler was registered.");
             }
 
+            RestoreAggregateVersion(instance.Version);
             _eventHandlers[instance.GetType()].Invoke(instance);
         }
 
-        private void InternalSetArchived()
-        {
-            IsArchived = true;
-        }
+        private void InternalSetArchived() => IsArchived = true;
     }
 
     public abstract class EventAggregate : EventAggregate<Guid>

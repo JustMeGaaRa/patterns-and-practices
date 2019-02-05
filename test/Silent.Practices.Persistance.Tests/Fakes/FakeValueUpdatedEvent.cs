@@ -4,7 +4,7 @@ namespace Silent.Practices.DDD.Tests.Fakes
 {
     internal sealed class FakeValueUpdatedEvent : EventWithGuidKey
     {
-        public FakeValueUpdatedEvent(Guid entityId) : base(entityId)
+        public FakeValueUpdatedEvent(Guid entityId, long version) : base(entityId, version)
         {
         }
 

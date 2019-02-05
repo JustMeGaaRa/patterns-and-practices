@@ -12,14 +12,14 @@ namespace Silent.Practices.DDD.Tests.Fakes
         
         public FakeEventAggregate(Guid eventAggregateId) : this()
         {
-            ApplyEvent(new FakeCreatedEvent(eventAggregateId));
+            ApplyEvent(new FakeCreatedEvent(eventAggregateId, GetNextAggregateVersion()));
         }
 
         public string Value { get; private set; }
 
         public void SetValue(string newValue)
         {
-            ApplyEvent(new FakeValueUpdatedEvent(EntityId) { NewValue = newValue });
+            ApplyEvent(new FakeValueUpdatedEvent(EntityId, GetNextAggregateVersion()) { NewValue = newValue });
         }
     }
 }

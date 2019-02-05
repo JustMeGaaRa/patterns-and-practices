@@ -78,7 +78,7 @@ namespace Silent.Practices.DDD.Tests
         {
             // Arrange
             Guid eventAggregateId = Guid.NewGuid();
-            EventWithGuidKey createdEvent = new FakeCreatedEvent(eventAggregateId);
+            EventWithGuidKey createdEvent = new FakeCreatedEvent(eventAggregateId, 1);
             IEnumerable<EventWithGuidKey> historyEvents = new [] { createdEvent };
             EventAggregate eventAggregate = new FakeEventAggregate();
 
@@ -106,7 +106,7 @@ namespace Silent.Practices.DDD.Tests
         public void ApplyHistory_WithNotSupportedEventType_ShouldThrowException()
         {
             // Arrange
-            EventWithGuidKey deletedEvent = new FakeDeletedEvent(Guid.NewGuid());
+            EventWithGuidKey deletedEvent = new FakeDeletedEvent(Guid.NewGuid(), 1);
             IEnumerable<EventWithGuidKey> historyEvents = new[] { deletedEvent };
             EventAggregate eventAggregate = new FakeEventAggregate();
 
